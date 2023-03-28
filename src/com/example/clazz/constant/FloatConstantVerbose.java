@@ -11,13 +11,6 @@ class FloatConstantVerbose implements ConstantVerbose {
     }
 
     @Override
-    public void print(int index, StringBuffer sb) {
-        System.out.println("#" + index + " = Float\t" + value);
-        sb.append("constant_item_" + index + "[label=\"" + index + "\\n Float(" + value + ")\"]");
-        sb.append(";\n");
-    }
-
-    @Override
     public int getSkipCount() {
         return 0;
     }

@@ -9,15 +9,6 @@ public class PackageConstantVerbose implements ConstantVerbose {
     public PackageConstantVerbose(DataInputStream dis) throws IOException {
         nameIndex = dis.readUnsignedShort();
     }
-
-    @Override
-    public void print(int index, StringBuffer sb) {
-        sb.append("constant_item_" + index + "[label=\"" + index + "\\n Package()\"]");
-        sb.append(";\n");
-        sb.append("constant_item_" + index + " -> constant_item_" + nameIndex + "[label=\"1.name\"]");
-        sb.append(";\n");
-    }
-
     @Override
     public int getSkipCount() {
         return 0;

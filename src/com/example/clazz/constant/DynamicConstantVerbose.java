@@ -17,11 +17,6 @@ public class DynamicConstantVerbose implements ConstantVerbose {
     }
 
     @Override
-    public void print(int index, StringBuffer sb) {
-        sb.append("c" + index + " [label=\"Dynamic\"];\n");
-    }
-
-    @Override
     public int getSkipCount() {
         return 0;
     }

@@ -13,17 +13,6 @@ class NameAndTypeConstantVerbose implements ConstantVerbose {
     }
 
     @Override
-    public void print(int index, StringBuffer sb) {
-        System.out.println("#" + index + " = NameAndType\t#" + nameIndex + ".#" + descriptorIndex);
-        sb.append("constant_item_" + index + "[label=\"" + index + "\\n NameAndType()\"]");
-        sb.append(";\n");
-        sb.append("constant_item_" + index + " -> constant_item_" + nameIndex + "[label=\"1.name\"]");
-        sb.append(";\n");
-        sb.append("constant_item_" + index + " -> constant_item_" + descriptorIndex + "[label=\"2.descriptor\"]");
-        sb.append(";\n");
-    }
-
-    @Override
     public int getSkipCount() {
         return 0;
     }

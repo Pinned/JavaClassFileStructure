@@ -12,14 +12,6 @@ class Utf8ConstantVerbose implements ConstantVerbose {
         dis.read(bytes);
         value = new String(bytes);
     }
-
-    @Override
-    public void print(int index, StringBuffer sb) {
-        System.out.println("#" + index + " = Utf8\t" + value);
-        sb.append("constant_item_" + index + "[label=\"" + index + "\\n Utf8(" + value + ")\"]");
-        sb.append(";\n");
-    }
-
     @Override
     public int getSkipCount() {
         return 0;
