@@ -12,9 +12,11 @@ public interface ConstantVerbose {
             System.out.print("\t" + value.get(this));
             // 生成 dot 语法
             sb.append("constant_item_" + index + "[label=\"" + index + "\\n " + verbose + "(" + value.get(this) + ")\"]");
+            sb.append(";\n");
         } catch (Exception e) {
             // 没有 value 字段，直接生成 dot 语法
             sb.append("constant_item_" + index + "[label=\"" + index + "\\n " + verbose + "()\"]");
+            sb.append(";\n");
         }
         Field[] allFields = this.getClass().getDeclaredFields();
         int i = 0;
