@@ -46,5 +46,14 @@ public interface ConstantVerbose {
 
     }
 
+    default String getValue() {
+        try {
+            Field value = this.getClass().getDeclaredField("value");
+            value.setAccessible(true);
+            return value.get(this).toString();
+        } catch (Exception e) {
+            return "";
+        }
+    }
     int getSkipCount();
 }
