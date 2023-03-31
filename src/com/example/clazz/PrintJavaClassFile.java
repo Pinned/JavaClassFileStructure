@@ -32,7 +32,7 @@ public class PrintJavaClassFile {
 
         // 读取 access flag \ this class \ super class
         int classAccessFlags = dis.readUnsignedShort();
-        System.out.println("访问标志：" + AccessFlag.getAccessFlagDetail(classAccessFlags));
+        System.out.println("访问标志：" + ClassAccessFlagsUtil.getAccessFlagDetail(classAccessFlags));
         int thisClass = dis.readUnsignedShort();
         System.out.println("this class：#" + thisClass);
         sb.append("this_class [label=\"this_class\", color=blue, shape = doublecircle];\n");
