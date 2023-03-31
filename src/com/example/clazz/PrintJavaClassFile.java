@@ -11,7 +11,7 @@ public class PrintJavaClassFile {
         // 获取当前项目的根目录
         String projectPath = System.getProperty("user.dir");
         System.out.println("当前项目的根目录：" + projectPath);
-        String filePath = projectPath + "/class_info/ClassFormat.class";
+        String filePath = projectPath + "/class_info/ClassFormat$1.class";
         FileInputStream fis = new FileInputStream(filePath);
         DataInputStream dis = new DataInputStream(fis);
         int magic = dis.readInt();
@@ -58,7 +58,7 @@ public class PrintJavaClassFile {
             int nameIndex = dis.readUnsignedShort();
             int descriptorIndex = dis.readUnsignedShort();
 
-            sb.append("field" + i + " [label=\"字段" + i + "\",style=filled];\n");
+            sb.append("field" + i + " [label=\"字段" + i + "\\n" + FieldAccessFlagsUtil.getAccessFlagDetail(accessFlags) + "\",style=filled, shape=box];\n");
             sb.append("field" + i + " -> constant_item_" + nameIndex + ";\n");
             sb.append("field" + i + " -> constant_item_" + descriptorIndex + ";\n");
             System.out.println("字段" + i + "的访问标志：" + FieldAccessFlagsUtil.getAccessFlagDetail(accessFlags) + "，名称索引：#" + nameIndex + "，描述符索引：#" + descriptorIndex);
