@@ -61,7 +61,7 @@ public class PrintJavaClassFile {
             sb.append("field" + i + " [label=\"字段" + i + "\",style=filled];\n");
             sb.append("field" + i + " -> constant_item_" + nameIndex + ";\n");
             sb.append("field" + i + " -> constant_item_" + descriptorIndex + ";\n");
-            System.out.println("字段" + i + "的访问标志：" + accessFlags + "，名称索引：#" + nameIndex + "，描述符索引：#" + descriptorIndex);
+            System.out.println("字段" + i + "的访问标志：" + FieldAccessFlagsUtil.getAccessFlagDetail(accessFlags) + "，名称索引：#" + nameIndex + "，描述符索引：#" + descriptorIndex);
             int attributesCount = dis.readUnsignedShort();
             System.out.println("字段" + i + "的属性数量：" + attributesCount);
             for (int j = 0; j < attributesCount; j++) {
