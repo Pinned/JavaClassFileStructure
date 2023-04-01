@@ -3,15 +3,21 @@ package com.example.clazz;
 import com.example.clazz.constant.*;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class PrintJavaClassFile {
     public static void main(String[] args) throws IOException {
         // 获取当前项目的根目录
         String projectPath = System.getProperty("user.dir");
         System.out.println("当前项目的根目录：" + projectPath);
-        String filePath = projectPath + "/class_info/TestEnum.class";
+        File file = new File(projectPath, "class_info");
+        for (File listFile : file.listFiles()) {
+            if (listFile.isFile() && listFile.getName().endsWith(".class")) {
+                parseClassFile(projectPath, listFile.getAbsolutePath());
+            }
+        }
+    }
+
+    private static void parseClassFile(String projectPath, String filePath) throws IOException {
         FileInputStream fis = new FileInputStream(filePath);
         DataInputStream dis = new DataInputStream(fis);
         int magic = dis.readInt();
@@ -73,8 +79,40 @@ public class PrintJavaClassFile {
             }
         }
 
+        int methodCount = dis.readUnsignedShort();
+        System.out.println("方法数量：" + methodCount);
+        for (int i = 0; i < methodCount; i++) {
+            int accessFlags = dis.readUnsignedShort();
+            int nameIndex = dis.readUnsignedShort();
+            int descriptorIndex = dis.readUnsignedShort();
+            sb.append("method" + i + " [label=\"方法" + i + "\\n" + MethodAccessFlagsUtil.getAccessFlagDetail(accessFlags) + "\",style=filled, shape=box];\n");
+            sb.append("method" + i + " -> constant_item_" + nameIndex + ";\n");
+            sb.append("method" + i + " -> constant_item_" + descriptorIndex + ";\n");
+            System.out.println("方法" + i + "的访问标志：" + MethodAccessFlagsUtil.getAccessFlagDetail(accessFlags) + "，名称索引：#" + nameIndex + "，描述符索引：#" + descriptorIndex);
+            int attributesCount = dis.readUnsignedShort();
+            System.out.println("方法" + i + "的属性数量：" + attributesCount);
+            for (int j = 0; j < attributesCount; j++) {
+                int attributeNameIndex = dis.readUnsignedShort();
+                int attributeLength = dis.readInt();
+                System.out.println("方法" + i + "的属性" + j + "的名称：" + attributeNameIndex);
+                System.out.println("方法" + i + "的属性" + j + "的长度：" + attributeLength);
+                dis.skipBytes(attributeLength);
+            }
+        }
+
         sb.append("}");
-        writeToFile(projectPath + "/class_info/constant_pool.dot", sb.toString());
+
+        // 获取当前 Class 文件名称
+        File classFile = new File(filePath);
+        String classFileName = classFile.getName().replace(".class", "");
+        writeToFile(projectPath + "/class_info/output/" + classFileName + ".dot", sb.toString());
+        dis.close();
+        fis.close();
+
+        // 执行命令
+        String cmd = "dot -Tpng " + projectPath + "/class_info/output/" + classFileName + ".dot -o " +
+                projectPath + "/class_info/output/" + classFileName + ".png";
+        Runtime.getRuntime().exec(cmd);
     }
 
 
