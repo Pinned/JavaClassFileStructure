@@ -11,7 +11,7 @@ public class PrintJavaClassFile {
         // 获取当前项目的根目录
         String projectPath = System.getProperty("user.dir");
         System.out.println("当前项目的根目录：" + projectPath);
-        String filePath = projectPath + "/class_info/ClassFormat$1.class";
+        String filePath = projectPath + "/class_info/TestEnum.class";
         FileInputStream fis = new FileInputStream(filePath);
         DataInputStream dis = new DataInputStream(fis);
         int magic = dis.readInt();
