@@ -96,6 +96,36 @@ public class PrintJavaClassFile {
                 int attributeLength = dis.readInt();
                 System.out.println("方法" + i + "的属性" + j + "的名称：" + attributeNameIndex);
                 System.out.println("方法" + i + "的属性" + j + "的长度：" + attributeLength);
+                // 解析属性
+                if (attributeNameIndex == 1) {
+                    int attributeNameIndex2 = dis.readUnsignedShort();
+                    int attributeLength2 = dis.readInt();
+                    System.out.println("方法" + i + "的属性" + j + "的属性" + attributeNameIndex2 + "的长度：" + attributeLength2);
+                    dis.skipBytes(attributeLength2);
+                } else if (attributeNameIndex == 12) {
+                    int maxStack = dis.readUnsignedShort();
+                    int maxLocals = dis.readUnsignedShort();
+                    int codeLength = dis.readInt();
+                    System.out.println("方法" + i + "的属性" + j + "的最大操作数栈：" + maxStack);
+                    System.out.println("方法" + i + "的属性" + j + "的局部变量表大小：" + maxLocals);
+                    System.out.println("方法" + i + "的属性" + j + "的字节码长度：" + codeLength);
+                    dis.skipBytes(codeLength);
+                    int exceptionTableLength = dis.readUnsignedShort();
+                    System.out.println("方法" + i + "的属性" + j + "的异常表长度：" + exceptionTableLength);
+                    dis.skipBytes(exceptionTableLength * 8);
+                    int attributesCount2 = dis.readUnsignedShort();
+                    System.out.println("方法" + i + "的属性" + j + "的属性数量：" + attributesCount2);
+                    for (int k = 0; k < attributesCount2; k++) {
+                        int attributeNameIndex2 = dis.readUnsignedShort();
+                        int attributeLength2 = dis.readInt();
+                        System.out.println("方法" + i + "的属性" + j + "的属性" + k + "的名称：" + attributeNameIndex2);
+                        System.out.println("方法" + i + "的属性" + j + "的属性" + k + "的长度：" + attributeLength2);
+                        dis.skipBytes(attributeLength2);
+                    }
+                } else {
+                    dis.skipBytes(attributeLength);
+                }
+
                 dis.skipBytes(attributeLength);
             }
         }
