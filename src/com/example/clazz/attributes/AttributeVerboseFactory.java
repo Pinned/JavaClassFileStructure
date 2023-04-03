@@ -18,6 +18,12 @@ public class AttributeVerboseFactory {
             case "ConstantValue":
                 verbose = new ConstantValueAttributeVerbose(parentTag, constants, attributeNameIndex);
                 break;
+            case "Deprecated":
+                verbose = new DeprecatedAttributeVerbose(parentTag, constants, attributeNameIndex);
+                break;
+            case "RuntimeVisibleAnnotations":
+                verbose = new RuntimeVisibleAnnotationsAttributeVerbose(parentTag, constants, attributeNameIndex);
+                break;
 //            case "Exceptions":
 //                verbose = new ExceptionsAttributeVerbose(constants, attributeNameIndex);
 //                break;
