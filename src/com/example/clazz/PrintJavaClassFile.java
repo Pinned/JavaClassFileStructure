@@ -1,8 +1,12 @@
 package com.example.clazz;
 
+import com.example.clazz.attributes.AttributeVerbose;
+import com.example.clazz.attributes.AttributeVerboseFactory;
 import com.example.clazz.constant.*;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PrintJavaClassFile {
     public static void main(String[] args) throws IOException {
@@ -28,12 +32,14 @@ public class PrintJavaClassFile {
         System.out.println("次版本号：" + minorVersion);
         System.out.println("主版本号：" + majorVersion);
         System.out.println("常量池数量：" + constantPoolCount);
+        Map<String, ConstantVerbose> allConstant = new HashMap<>();
         StringBuffer sb = new StringBuffer("digraph constant_pool { \n");
         for (int i = 1; i < constantPoolCount; i++) {
             int tag = dis.readUnsignedByte();
             ConstantVerbose constantVerbose = ConstantVerboseFactory.createConstant(tag, dis);
             constantVerbose.print(i, sb);
             i += constantVerbose.getSkipCount();
+            allConstant.put(String.valueOf(i), constantVerbose);
         }
 
         // 读取 access flag \ this class \ super class
@@ -65,17 +71,18 @@ public class PrintJavaClassFile {
             int descriptorIndex = dis.readUnsignedShort();
 
             sb.append("field" + i + " [label=\"字段" + i + "\\n" + FieldAccessFlagsUtil.getAccessFlagDetail(accessFlags) + "\",style=filled, shape=box];\n");
-            sb.append("field" + i + " -> constant_item_" + nameIndex + ";\n");
-            sb.append("field" + i + " -> constant_item_" + descriptorIndex + ";\n");
+            sb.append("field" + i + " -> constant_item_" + nameIndex + "[label=\"name\"];\n");
+            sb.append("field" + i + " -> constant_item_" + descriptorIndex + "[label=\"descriptor\"];\n");
             System.out.println("字段" + i + "的访问标志：" + FieldAccessFlagsUtil.getAccessFlagDetail(accessFlags) + "，名称索引：#" + nameIndex + "，描述符索引：#" + descriptorIndex);
             int attributesCount = dis.readUnsignedShort();
             System.out.println("字段" + i + "的属性数量：" + attributesCount);
             for (int j = 0; j < attributesCount; j++) {
                 int attributeNameIndex = dis.readUnsignedShort();
                 int attributeLength = dis.readInt();
-                System.out.println("字段" + i + "的属性" + j + "的名称：" + attributeNameIndex);
-                System.out.println("字段" + i + "的属性" + j + "的长度：" + attributeLength);
-                dis.skipBytes(attributeLength);
+                AttributeVerbose verbose = AttributeVerboseFactory.createAttributeVerbose(
+                        "field_" + i + "_attribute_" + j,
+                        allConstant, attributeNameIndex, attributeLength, dis);
+                verbose.print("field" + i, sb);
             }
         }
 
