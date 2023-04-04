@@ -31,6 +31,7 @@ public class RuntimeVisibleAnnotationsAttributeVerbose extends AttributeVerbose 
         for (int i = 0; i < numAnnotations; i++) {
             elements[i].print(getCurrentNodeName(), i, sb);
             sb.append(getCurrentNodeName() + " -> " + getCurrentNodeName() + "_" + i + "[label=\"annotation" + i + "\"]");
+            sb.append(";\n");
         }
 
     }

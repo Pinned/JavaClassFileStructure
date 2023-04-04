@@ -88,22 +88,28 @@ public class AnnotationElementValue {
             case 'Z':
             case 's':
                 sb.append(currentNodeName + " -> constant_item_" + constValueIndex + "[label=\"constValue\"]");
+                sb.append(";\n");
                 break;
             case 'e':
                 sb.append(currentNodeName + " -> constant_item_" + typeNameIndex + "[label=\"typeName\"]");
+                sb.append(";\n");
                 sb.append(currentNodeName + " -> constant_item_" + constNameIndex + "[label=\"constName\"]");
+                sb.append(";\n");
                 break;
             case 'c':
                 sb.append(currentNodeName + " -> constant_item_" + classInfoIndex + "[label=\"classInfo\"]");
+                sb.append(";\n");
                 break;
             case '@':
                 annotationValue.print(currentNodeName, 0, sb);
                 sb.append(currentNodeName + " -> " + currentNodeName + "_annotationValue[label=\"annotationValue\"]");
+                sb.append(";\n");
                 break;
             case '[':
                 for (int i = 0; i < numValues; i++) {
                     values[i].print(currentNodeName, sb);
                     sb.append(currentNodeName + " -> " + currentNodeName + "_" + i + "[label=\"value" + i + "\"]");
+                    sb.append(";\n");
                 }
                 break;
             default:

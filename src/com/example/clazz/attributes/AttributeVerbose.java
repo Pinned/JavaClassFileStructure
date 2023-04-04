@@ -22,9 +22,12 @@ public abstract class AttributeVerbose {
     public abstract void readAttribute(int attributeLength, DataInputStream dataInputStream) throws IOException;
 
     public void print(String parent, StringBuffer sb) {
-        sb.append(getCurrentNodeName() + "[label=\"" + parentTag + "\n" + attributeName + "\"]");
+        sb.append(getCurrentNodeName() + "[label=\"" + parentTag + "\\n" + attributeName + "\", color=\"#FF0\"]");
+        sb.append(";\n");
         sb.append(parent + " -> " + getCurrentNodeName() + "[label=\"attribute\"]");
+        sb.append(";\n");
         sb.append(getCurrentNodeName() + " -> constant_item_" + attributeNameIndex + "[label=\"attributeName\"]");
+        sb.append(";\n");
     }
 
     public String getCurrentNodeName() {

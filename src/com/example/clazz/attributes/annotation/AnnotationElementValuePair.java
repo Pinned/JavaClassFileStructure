@@ -23,8 +23,11 @@ public class AnnotationElementValuePair {
     public void print(String parent, int i, StringBuffer sb) {
         String currentNodeName = parent + "_" + i;
         sb.append(currentNodeName + "[label=\"element" + i + "\"]");
+        sb.append(";\n");
         sb.append(currentNodeName + " -> constant_item_" + elementNameIndex + "[label=\"elementName\"]");
+        sb.append(";\n");
         value.print(currentNodeName, sb);
         sb.append(currentNodeName + " -> " + currentNodeName + "_value[label=\"value\"]");
+        sb.append(";\n");
     }
 }

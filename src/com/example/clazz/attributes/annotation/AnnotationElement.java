@@ -31,11 +31,14 @@ public class AnnotationElement {
 
     public void print(String parent, int index, StringBuffer sb) {
         String currentNodeName = parent + "_" + index;
-        sb.append(currentNodeName + "[label=\"annotation" + index + "\"]");
+        sb.append(currentNodeName + "[label=\"annotation" + index + "\", shape=diamond]");
+        sb.append(";\n");
         sb.append(currentNodeName + " -> constant_item_" + typeIndex + "[label=\"type\"]");
+        sb.append(";\n");
         for (int i = 0; i < numElementValuePairs; i++) {
             elementValuePairs[i].print(currentNodeName, i, sb);
             sb.append(currentNodeName + " -> " + currentNodeName + "_" + i + "[label=\"element" + i + "\"]");
+            sb.append(";\n");
         }
     }
 }

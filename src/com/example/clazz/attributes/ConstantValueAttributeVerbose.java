@@ -24,5 +24,6 @@ public class ConstantValueAttributeVerbose extends AttributeVerbose {
     public void print(String parent, StringBuffer sb) {
         super.print(parent, sb);
         sb.append(getCurrentNodeName() + " -> constant_item_" + constantValueIndex + "[label=\"constantValue\"]");
+        sb.append(";\n");
     }
 }
