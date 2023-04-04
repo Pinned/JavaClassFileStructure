@@ -14,6 +14,8 @@ abstract class ClassFormat implements GenericInterface<String> {
     public transient String initStr = "This is a String";
     public TestEnum eum1;
 
+    private String innerStr = "this is inner string.";
+
     public ClassFormat() {
     }
 
@@ -21,7 +23,7 @@ abstract class ClassFormat implements GenericInterface<String> {
         TestInterface intVerbos = new TestInterface() {
             @Override
             public void testMethodV1() {
-
+                System.out.println(innerStr);
             }
 
             @Override
@@ -74,17 +76,6 @@ abstract class ClassFormat implements GenericInterface<String> {
     }
 }
 
-enum TestEnum {
-    TEST_ENUM_V1,
-    TEST_ENUM_V2
-}
 
-interface TestInterface {
-    void testMethodV1();
 
-    void testMethodV2();
-}
 
-interface GenericInterface<T> {
-    T testBridgeMethod();
-}
