@@ -3,6 +3,7 @@ package com.example.clazz;
 import com.example.clazz.attributes.AttributeVerbose;
 import com.example.clazz.attributes.AttributeVerboseFactory;
 import com.example.clazz.constant.*;
+import com.example.clazz.format.Main;
 
 import java.io.*;
 import java.util.HashMap;
@@ -10,6 +11,7 @@ import java.util.Map;
 
 public class PrintJavaClassFile {
     public static void main(String[] args) throws IOException {
+        Main.main(args);
         // 获取当前项目的根目录
         String projectPath = System.getProperty("user.dir");
         System.out.println("当前项目的根目录：" + projectPath);
@@ -100,13 +102,27 @@ public class PrintJavaClassFile {
             System.out.println("方法" + i + "的访问标志：" + MethodAccessFlagsUtil.getAccessFlagDetail(accessFlags) + "，名称索引：#" + nameIndex + "，描述符索引：#" + descriptorIndex);
             int attributesCount = dis.readUnsignedShort();
             System.out.println("方法" + i + "的属性数量：" + attributesCount);
+
             for (int j = 0; j < attributesCount; j++) {
                 int attributeNameIndex = dis.readUnsignedShort();
                 int attributeLength = dis.readInt();
-                System.out.println("方法" + i + "的属性" + j + "的名称：" + attributeNameIndex);
-                System.out.println("方法" + i + "的属性" + j + "的长度：" + attributeLength);
-                dis.skipBytes(attributeLength);
+                AttributeVerbose verbose = AttributeVerboseFactory.createAttributeVerbose(
+                        "method_" + i + "_attribute_" + j,
+                        allConstant, attributeNameIndex, attributeLength, dis);
+                verbose.print("method" + i, sb);
             }
+        }
+
+        // 写一个 class-attribute 的跟节点
+        sb.append("class_attribute[label=\"\", shape = circle, style=filled, color=\"#171C2C\"];\n");
+        int classAttributeCount = dis.readUnsignedShort();
+        for (int i = 0; i < classAttributeCount; i++) {
+            int attributeNameIndex = dis.readUnsignedShort();
+            int attributeLength = dis.readInt();
+            AttributeVerbose verbose = AttributeVerboseFactory.createAttributeVerbose(
+                    "class_file_attribute_" + i,
+                    allConstant, attributeNameIndex, attributeLength, dis);
+            verbose.print("class_attribute", sb);
         }
 
         sb.append("}");

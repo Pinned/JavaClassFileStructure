@@ -24,6 +24,9 @@ public class AttributeVerboseFactory {
             case "RuntimeVisibleAnnotations":
                 verbose = new RuntimeVisibleAnnotationsAttributeVerbose(parentTag, constants, attributeNameIndex);
                 break;
+            case "Signature":
+                verbose = new SignatureAttributeVerbose(parentTag, constants, attributeNameIndex);
+                break;
 //            case "Exceptions":
 //                verbose = new ExceptionsAttributeVerbose(constants, attributeNameIndex);
 //                break;
