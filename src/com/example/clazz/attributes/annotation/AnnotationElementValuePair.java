@@ -43,6 +43,6 @@ public class AnnotationElementValuePair {
 
         DotItem item = value.createDotItem(classDot, elemValuePairDot, 0);
         elemValuePairDot.addChild("value", item);
-        return null;
+        return elemValuePairDot;
     }
 }

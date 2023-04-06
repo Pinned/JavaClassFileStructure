@@ -18,8 +18,8 @@ public class PrintJavaClassFile {
         String projectPath = System.getProperty("user.dir");
         System.out.println("当前项目的根目录：" + projectPath);
         File file = new File(projectPath, "class_info");
-//        File mainFile = new File(file, "Main.class");
-//        parseClassFile(projectPath, mainFile.getAbsolutePath(), mainFile.getName());
+        File mainFile = new File(file, "IntRange.class");
+        parseClassFile(projectPath, mainFile.getAbsolutePath(), mainFile.getName());
         for (File listFile : file.listFiles()) {
             if (listFile.isFile() && listFile.getName().endsWith(".class")) {
                 System.out.println();
