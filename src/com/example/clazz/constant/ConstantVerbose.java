@@ -1,23 +1,27 @@
 package com.example.clazz.constant;
 
+import com.example.clazz.dot.ClassDot;
+import com.example.clazz.dot.ConstantArrayDotItem;
+import com.example.clazz.dot.DotItem;
+
 import java.lang.reflect.Field;
 
 public interface ConstantVerbose {
-    default void print(int index, StringBuffer sb) {
+
+    default ConstantArrayDotItem createDotItem(int index, ClassDot classDot) {
+
         String verbose = this.getClass().getSimpleName().replace("ConstantVerbose", "");
-        System.out.print("#" + index + " = " + verbose);
+        String showLabel = "";
         try {
             Field value = this.getClass().getDeclaredField("value");
             value.setAccessible(true);
-            System.out.print("\t" + value.get(this));
-            // 生成 dot 语法
-            sb.append("constant_item_" + index + "[label=\"" + index + "\\n " + verbose + "(" + value.get(this) + ")\"]");
-            sb.append(";\n");
+            showLabel = verbose + "(" + value.get(this) + ")";
         } catch (Exception e) {
             // 没有 value 字段，直接生成 dot 语法
-            sb.append("constant_item_" + index + "[label=\"" + index + "\\n " + verbose + "()\"]");
-            sb.append(";\n");
+            showLabel = verbose + "()";
         }
+        ConstantArrayDotItem item = new ConstantArrayDotItem(index, showLabel);
+        item.constant = this;
         Field[] allFields = this.getClass().getDeclaredFields();
         int i = 0;
         for (Field field : allFields) {
@@ -27,23 +31,14 @@ public interface ConstantVerbose {
                 if (field.getName().equals("value")) {
                     continue;
                 }
-                // 如果是第一个字段，添加一个 \t
-                if (i == 0) {
-                    System.out.print("\t#" + field.get(this));
-                } else {
-                    System.out.print(".#" + field.get(this));
-                }
                 String fieldName = field.getName().replaceAll("Index", "");
-                sb.append("constant_item_" + index + " -> constant_item_" + field.get(this) + "[label=\"" + fieldName + "\"]");
-                sb.append(";\n");
+                item.addChild(fieldName, classDot.getConstantItem((Integer) field.get(this)));
                 i++;
             } catch (Exception e) {
                 // 没有直接跳过
             }
         }
-
-        System.out.println();
-
+        return item;
     }
 
     default String getValue() {
@@ -55,5 +50,6 @@ public interface ConstantVerbose {
             return "";
         }
     }
+
     int getSkipCount();
 }

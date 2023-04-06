@@ -9,12 +9,9 @@ import java.util.Map;
 public class CodeAttributeVerbose extends AttributeVerbose {
 
 
-    public CodeAttributeVerbose(String parentTag, Map<String, ConstantVerbose> constants, int attributeNameIndex) {
-        super(parentTag, constants, attributeNameIndex);
-    }
-
-    @Override
-    public void readAttribute(int attributeLength, DataInputStream dataInputStream) throws IOException {
-        dataInputStream.skipBytes(attributeLength);
+    public CodeAttributeVerbose(int attributeNameIndex, String attributeName, DataInputStream dis) throws IOException {
+        super(attributeNameIndex, attributeName, dis);
+        // TODO 此处先跳过具体内容
+        dis.skipBytes(attributeLength);
     }
 }

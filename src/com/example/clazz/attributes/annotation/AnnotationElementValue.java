@@ -1,6 +1,10 @@
 package com.example.clazz.attributes.annotation;
 
 import com.example.clazz.constant.ConstantVerbose;
+import com.example.clazz.dot.ArrayDotItem;
+import com.example.clazz.dot.ClassDot;
+import com.example.clazz.dot.DotItem;
+import com.example.clazz.dot.DotStyle;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -34,7 +38,7 @@ public class AnnotationElementValue {
     public int numValues;
     public AnnotationElementValue[] values;
 
-    public void read(DataInputStream dis, Map<String, ConstantVerbose> constants) throws IOException {
+    public void read(DataInputStream dis) throws IOException {
         tag = dis.readByte();
         switch (tag) {
             case 'B':
@@ -57,14 +61,14 @@ public class AnnotationElementValue {
                 break;
             case '@':
                 annotationValue = new AnnotationElement();
-                annotationValue.read(dis, constants);
+                annotationValue.read(dis);
                 break;
             case '[':
                 numValues = dis.readUnsignedShort();
                 values = new AnnotationElementValue[numValues];
                 for (int i = 0; i < numValues; i++) {
                     values[i] = new AnnotationElementValue();
-                    values[i].read(dis, constants);
+                    values[i].read(dis);
                 }
                 break;
             default:
@@ -75,8 +79,12 @@ public class AnnotationElementValue {
     }
 
     public void print(String parent, StringBuffer sb) {
-        String currentNodeName = parent + "_value";
-        sb.append(currentNodeName + "[label=\"value\"]");
+
+    }
+
+    public DotItem createDotItem(ClassDot classDot, ArrayDotItem parent, int index) {
+        ArrayDotItem item = new ArrayDotItem("value", index, "value")
+                .parent(parent).style(DotStyle.DASHED);
         switch (tag) {
             case 'B':
             case 'C':
@@ -87,34 +95,29 @@ public class AnnotationElementValue {
             case 'S':
             case 'Z':
             case 's':
-                sb.append(currentNodeName + " -> constant_item_" + constValueIndex + "[label=\"constValue\"]");
-                sb.append(";\n");
+                item.addChild("constValue", classDot.getConstantItem(constValueIndex));
                 break;
             case 'e':
-                sb.append(currentNodeName + " -> constant_item_" + typeNameIndex + "[label=\"typeName\"]");
-                sb.append(";\n");
-                sb.append(currentNodeName + " -> constant_item_" + constNameIndex + "[label=\"constName\"]");
-                sb.append(";\n");
+                item.addChild("typeName", classDot.getConstantItem(typeNameIndex));
+                item.addChild("constName", classDot.getConstantItem(constNameIndex));
                 break;
             case 'c':
-                sb.append(currentNodeName + " -> constant_item_" + classInfoIndex + "[label=\"classInfo\"]");
-                sb.append(";\n");
+                item.addChild("classInfo", classDot.getConstantItem(classInfoIndex));
                 break;
             case '@':
-                annotationValue.print(currentNodeName, 0, sb);
-                sb.append(currentNodeName + " -> " + currentNodeName + "_annotationValue[label=\"annotationValue\"]");
-                sb.append(";\n");
+                DotItem annotationItem = annotationValue.createDotItem(classDot, item, 0);
+                item.addChild("annotationValue", annotationItem);
                 break;
             case '[':
                 for (int i = 0; i < numValues; i++) {
-                    values[i].print(currentNodeName, sb);
-                    sb.append(currentNodeName + " -> " + currentNodeName + "_" + i + "[label=\"value" + i + "\"]");
-                    sb.append(";\n");
+                    DotItem innerItem = values[i].createDotItem(classDot, item, i);
+                    item.addChild("value_" + i, innerItem);
                 }
                 break;
             default:
                 // 跳过对应字节数
                 break;
         }
+        return item;
     }
 }

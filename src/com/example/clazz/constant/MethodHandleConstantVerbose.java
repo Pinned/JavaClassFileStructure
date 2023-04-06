@@ -1,5 +1,9 @@
 package com.example.clazz.constant;
 
+import com.example.clazz.dot.ClassDot;
+import com.example.clazz.dot.ConstantArrayDotItem;
+import com.example.clazz.dot.DotItem;
+
 import java.io.DataInputStream;
 import java.io.IOException;
 
@@ -13,12 +17,10 @@ class MethodHandleConstantVerbose implements ConstantVerbose {
     }
 
     @Override
-    public void print(int index, StringBuffer sb) {
-        System.out.println("#" + index + " = MethodHandle\t" + methodHandleKind + ".#" + methodHandleIndex);
-        sb.append("constant_item_" + index + "[label=\"" + index + "\\n MethodHandle(" + methodHandleKind + ")\"]");
-        sb.append(";\n");
-        sb.append("constant_item_" + index + " -> constant_item_" + methodHandleIndex + "[label=\"index\"]");
-        sb.append(";\n");
+    public ConstantArrayDotItem createDotItem(int index, ClassDot classDot) {
+        ConstantArrayDotItem item = new ConstantArrayDotItem(index, "MethodHandle(" + methodHandleKind + ")");
+        item.addChild("methodHandle", classDot.getConstantItem(methodHandleIndex));
+        return item;
     }
 
     @Override

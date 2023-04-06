@@ -7,25 +7,24 @@ import java.io.IOException;
 import java.util.Map;
 
 public class AttributeVerboseFactory {
-    public static AttributeVerbose createAttributeVerbose(String parentTag, Map<String, ConstantVerbose> constants,
-                                                          int attributeNameIndex, int attributeLength, DataInputStream dis) throws IOException {
-        String attributeName = constants.get(String.valueOf(attributeNameIndex)).getValue();
+
+    public static AttributeVerbose createAttributeVerbose(int attributeNameIndex, String name, DataInputStream dis) throws IOException {
         AttributeVerbose verbose = null;
-        switch (attributeName) {
+        switch (name) {
             case "Code":
-                verbose = new CodeAttributeVerbose(parentTag, constants, attributeNameIndex);
+                verbose = new CodeAttributeVerbose(attributeNameIndex, name, dis);
                 break;
             case "ConstantValue":
-                verbose = new ConstantValueAttributeVerbose(parentTag, constants, attributeNameIndex);
+                verbose = new ConstantValueAttributeVerbose(attributeNameIndex, name, dis);
                 break;
             case "Deprecated":
-                verbose = new DeprecatedAttributeVerbose(parentTag, constants, attributeNameIndex);
+                verbose = new DeprecatedAttributeVerbose(attributeNameIndex, name, dis);
                 break;
             case "RuntimeVisibleAnnotations":
-                verbose = new RuntimeVisibleAnnotationsAttributeVerbose(parentTag, constants, attributeNameIndex);
+                verbose = new RuntimeVisibleAnnotationsAttributeVerbose(attributeNameIndex, name, dis);
                 break;
             case "Signature":
-                verbose = new SignatureAttributeVerbose(parentTag, constants, attributeNameIndex);
+                verbose = new SignatureAttributeVerbose(attributeNameIndex, name, dis);
                 break;
 //            case "Exceptions":
 //                verbose = new ExceptionsAttributeVerbose(constants, attributeNameIndex);
@@ -46,11 +45,9 @@ public class AttributeVerboseFactory {
 //                verbose = new SyntheticAttributeVerbose(constants, attributeNameIndex);
 //                break;
             default:
-                verbose = new UnknownAttributeVerbose(parentTag, constants, attributeNameIndex);
+                verbose = new UnknownAttributeVerbose(attributeNameIndex, name, dis);
                 break;
         }
-        verbose.readAttribute(attributeLength, dis);
         return verbose;
-
     }
 }

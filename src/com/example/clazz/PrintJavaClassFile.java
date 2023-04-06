@@ -3,8 +3,10 @@ package com.example.clazz;
 import com.example.clazz.attributes.AttributeVerbose;
 import com.example.clazz.attributes.AttributeVerboseFactory;
 import com.example.clazz.constant.*;
+import com.example.clazz.dot.*;
 import com.example.clazz.format.Main;
 
+import java.awt.*;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,53 +22,73 @@ public class PrintJavaClassFile {
             if (listFile.isFile() && listFile.getName().endsWith(".class")) {
                 System.out.println();
                 System.out.println(listFile.getName());
-                parseClassFile(projectPath, listFile.getAbsolutePath());
+                parseClassFile(projectPath, listFile.getAbsolutePath(), listFile.getName());
             }
         }
     }
 
-    private static void parseClassFile(String projectPath, String filePath) throws IOException {
+    private static void parseClassFile(String projectPath, String filePath, String className) throws IOException {
         FileInputStream fis = new FileInputStream(filePath);
         DataInputStream dis = new DataInputStream(fis);
+        ClassDot classDot = new ClassDot(className);
         int magic = dis.readInt();
         int minorVersion = dis.readUnsignedShort();
         int majorVersion = dis.readUnsignedShort();
-        int constantPoolCount = dis.readUnsignedShort();
         System.out.println("魔数：" + Integer.toHexString(magic));
         System.out.println("次版本号：" + minorVersion);
         System.out.println("主版本号：" + majorVersion);
-        System.out.println("常量池数量：" + constantPoolCount);
-        Map<String, ConstantVerbose> allConstant = new HashMap<>();
-        StringBuffer sb = new StringBuffer("digraph constant_pool { \n");
-        for (int i = 1; i < constantPoolCount; i++) {
-            int tag = dis.readUnsignedByte();
-            ConstantVerbose constantVerbose = ConstantVerboseFactory.createConstant(tag, dis);
-            constantVerbose.print(i, sb);
-            i += constantVerbose.getSkipCount();
-            allConstant.put(String.valueOf(i), constantVerbose);
+
+        // 读取常量池
+        readConstantPool(dis, classDot);
+        readClassAccessFlag(dis, classDot);
+        // 读取 this class
+        readClassClassIndex(dis, classDot, "this_class");
+        readClassClassIndex(dis, classDot, "super_class");
+        readInterfaces(dis, classDot);
+
+
+        readField(dis, classDot);
+
+        readMethod(dis, classDot);
+
+
+        readAttribute(dis, classDot, classDot.rootItem);
+
+        // 获取当前 Class 文件名称
+        File classFile = new File(filePath);
+        String classFileName = classFile.getName().replace(".class", "");
+
+
+        writeToFile(projectPath + "/class_info/output/" + classFileName + ".dot", classDot.toString());
+        dis.close();
+        fis.close();
+
+        // 执行命令
+        String cmd = "dot -Tpng " + projectPath + "/class_info/output/" + classFileName + ".dot -o " + projectPath + "/class_info/output/" + classFileName + ".png";
+        Runtime.getRuntime().exec(cmd);
+    }
+
+    private static void readMethod(DataInputStream dis, ClassDot classDot) throws IOException {
+        int methodCount = dis.readUnsignedShort();
+        System.out.println("方法数量：" + methodCount);
+        for (int i = 0; i < methodCount; i++) {
+            int accessFlags = dis.readUnsignedShort();
+            int nameIndex = dis.readUnsignedShort();
+            int descriptorIndex = dis.readUnsignedShort();
+            ArrayDotItem methodDotItem = new ArrayDotItem("method", i, "方法" + i)
+                    .style(DotStyle.FILLED)
+                    .shape(DotShape.BOX);
+            DotItem fieldAccessFlag = new DotItem("access_flg", FieldAccessFlagsUtil.getAccessFlagDetail(accessFlags))
+                    .parent(methodDotItem);
+            methodDotItem.addChild("access", fieldAccessFlag);
+            methodDotItem.addChild("name", classDot.getConstantItem(nameIndex));
+            methodDotItem.addChild("descriptor", classDot.getConstantItem(descriptorIndex));
+            readAttribute(dis, classDot, methodDotItem);
+            classDot.addChild("", methodDotItem);
         }
+    }
 
-        // 读取 access flag \ this class \ super class
-        int classAccessFlags = dis.readUnsignedShort();
-        System.out.println("访问标志：" + ClassAccessFlagsUtil.getAccessFlagDetail(classAccessFlags));
-        int thisClass = dis.readUnsignedShort();
-        System.out.println("this class：#" + thisClass);
-        sb.append("this_class [label=\"this_class\", color=blue, shape = doublecircle];\n");
-        sb.append("this_class -> constant_item_" + thisClass + ";\n");
-        int superClass = dis.readUnsignedShort();
-        System.out.println("super class：#" + superClass);
-        sb.append("super_class [label=\"super_class\", color=blue, shape=doublecircle];\n");
-        sb.append("super_class -> constant_item_" + superClass + ";\n");
-        int interfaceCount = dis.readUnsignedShort();
-        System.out.println("接口数量：" + interfaceCount);
-        for (int i = 0; i < interfaceCount; i++) {
-            int interfaceIndex = dis.readUnsignedShort();
-            System.out.println("接口" + i + "的索引：#" + interfaceIndex);
-            sb.append("interface" + i + " [label=\"接口" + i + "\",shape=doublecircle];\n");
-            sb.append("interface" + i + " -> constant_item_" + interfaceIndex + ";\n");
-        }
-
-
+    private static void readField(DataInputStream dis, ClassDot classDot) throws IOException {
         int fieldCount = dis.readUnsignedShort();
         System.out.println("字段数量：" + fieldCount);
         for (int i = 0; i < fieldCount; i++) {
@@ -74,70 +96,77 @@ public class PrintJavaClassFile {
             int nameIndex = dis.readUnsignedShort();
             int descriptorIndex = dis.readUnsignedShort();
 
-            sb.append("field" + i + " [label=\"字段" + i + "\\n" + FieldAccessFlagsUtil.getAccessFlagDetail(accessFlags) + "\",style=filled, shape=box];\n");
-            sb.append("field" + i + " -> constant_item_" + nameIndex + "[label=\"name\"];\n");
-            sb.append("field" + i + " -> constant_item_" + descriptorIndex + "[label=\"descriptor\"];\n");
-            System.out.println("字段" + i + "的访问标志：" + FieldAccessFlagsUtil.getAccessFlagDetail(accessFlags) + "，名称索引：#" + nameIndex + "，描述符索引：#" + descriptorIndex);
-            int attributesCount = dis.readUnsignedShort();
-            System.out.println("字段" + i + "的属性数量：" + attributesCount);
-            for (int j = 0; j < attributesCount; j++) {
-                int attributeNameIndex = dis.readUnsignedShort();
-                int attributeLength = dis.readInt();
-                AttributeVerbose verbose = AttributeVerboseFactory.createAttributeVerbose(
-                        "field_" + i + "_attribute_" + j,
-                        allConstant, attributeNameIndex, attributeLength, dis);
-                verbose.print("field" + i, sb);
-            }
+            DotItem fieldItem = new DotItem("field_" + i, "字段" + i)
+                    .style(DotStyle.FILLED)
+                    .shape(DotShape.BOX);
+            DotItem fieldAccessFlag = new DotItem("access_flg", FieldAccessFlagsUtil.getAccessFlagDetail(accessFlags))
+                    .parent(fieldItem);
+            fieldItem.addChild("access", fieldAccessFlag);
+            fieldItem.addChild("name", classDot.getConstantItem(nameIndex));
+            fieldItem.addChild("descriptor", classDot.getConstantItem(descriptorIndex));
+
+            readAttribute(dis, classDot, fieldItem);
+
+            classDot.addChild("", fieldItem);
         }
+    }
 
-        int methodCount = dis.readUnsignedShort();
-        System.out.println("方法数量：" + methodCount);
-        for (int i = 0; i < methodCount; i++) {
-            int accessFlags = dis.readUnsignedShort();
-            int nameIndex = dis.readUnsignedShort();
-            int descriptorIndex = dis.readUnsignedShort();
-            sb.append("method" + i + " [label=\"方法" + i + "\\n" + MethodAccessFlagsUtil.getAccessFlagDetail(accessFlags) + "\",style=filled, shape=box];\n");
-            sb.append("method" + i + " -> constant_item_" + nameIndex + ";\n");
-            sb.append("method" + i + " -> constant_item_" + descriptorIndex + ";\n");
-            System.out.println("方法" + i + "的访问标志：" + MethodAccessFlagsUtil.getAccessFlagDetail(accessFlags) + "，名称索引：#" + nameIndex + "，描述符索引：#" + descriptorIndex);
-            int attributesCount = dis.readUnsignedShort();
-            System.out.println("方法" + i + "的属性数量：" + attributesCount);
+    private static void readAttribute(DataInputStream dis, ClassDot classDot, DotItem parent) throws IOException {
+        int attributesCount = dis.readUnsignedShort();
+        DotItem attributeCountDot = new DotItem("attribute_count", String.valueOf(attributesCount))
+                .parent(parent).style(DotStyle.DASHED);
+        parent.addChild("attribute", attributeCountDot);
 
-            for (int j = 0; j < attributesCount; j++) {
-                int attributeNameIndex = dis.readUnsignedShort();
-                int attributeLength = dis.readInt();
-                AttributeVerbose verbose = AttributeVerboseFactory.createAttributeVerbose(
-                        "method_" + i + "_attribute_" + j,
-                        allConstant, attributeNameIndex, attributeLength, dis);
-                verbose.print("method" + i, sb);
-            }
-        }
-
-        // 写一个 class-attribute 的跟节点
-        sb.append("class_attribute[label=\"\", shape = circle, style=filled, color=\"#171C2C\"];\n");
-        int classAttributeCount = dis.readUnsignedShort();
-        for (int i = 0; i < classAttributeCount; i++) {
+        for (int j = 0; j < attributesCount; j++) {
             int attributeNameIndex = dis.readUnsignedShort();
-            int attributeLength = dis.readInt();
-            AttributeVerbose verbose = AttributeVerboseFactory.createAttributeVerbose(
-                    "class_file_attribute_" + i,
-                    allConstant, attributeNameIndex, attributeLength, dis);
-            verbose.print("class_attribute", sb);
+            String attributeName = classDot.getConstantItem(attributeNameIndex).constant.getValue();
+            AttributeVerbose verbose = AttributeVerboseFactory.createAttributeVerbose(attributeNameIndex, attributeName, dis);
+            DotItem item = verbose.createDotItem(classDot, attributeCountDot, j);
+            attributeCountDot.addChild("", item);
         }
+    }
 
-        sb.append("}");
+    private static void readInterfaces(DataInputStream dis, ClassDot classDot) throws IOException {
+        int interfaceCount = dis.readUnsignedShort();
+        System.out.println("接口数量：" + interfaceCount);
+        for (int i = 0; i < interfaceCount; i++) {
+            readClassClassIndex(dis, classDot, "interface_" + i, "接口" + i);
+        }
+    }
 
-        // 获取当前 Class 文件名称
-        File classFile = new File(filePath);
-        String classFileName = classFile.getName().replace(".class", "");
-        writeToFile(projectPath + "/class_info/output/" + classFileName + ".dot", sb.toString());
-        dis.close();
-        fis.close();
+    private static void readClassClassIndex(DataInputStream dis, ClassDot classDot, String name) throws IOException {
+        readClassClassIndex(dis, classDot, name, name);
+    }
 
-        // 执行命令
-        String cmd = "dot -Tpng " + projectPath + "/class_info/output/" + classFileName + ".dot -o " +
-                projectPath + "/class_info/output/" + classFileName + ".png";
-        Runtime.getRuntime().exec(cmd);
+    private static void readClassClassIndex(DataInputStream dis, ClassDot classDot, String name, String showValue) throws IOException {
+        int thisClass = dis.readUnsignedShort();
+        System.out.println(showValue + "：#" + thisClass);
+        DotItem thisClassDot = new DotItem(name, showValue);
+        thisClassDot.color = Color.BLUE;
+        thisClassDot.shape = DotShape.DOUBLECIRCLE;
+        classDot.addChild(name, thisClassDot);
+        thisClassDot.addChild("", classDot.getConstantItem(thisClass));
+    }
+
+    private static void readClassAccessFlag(DataInputStream dis, ClassDot classDot) throws IOException {
+        // 读取 access flag \ this class \ super class
+        int classAccessFlags = dis.readUnsignedShort();
+        System.out.println("访问标志：" + ClassAccessFlagsUtil.getAccessFlagDetail(classAccessFlags));
+        DotItem item = new DotItem("class_access_flags", ClassAccessFlagsUtil.getAccessFlagDetail(classAccessFlags));
+        classDot.addChild("", item);
+    }
+
+    private static void readConstantPool(DataInputStream dis, ClassDot classDot) throws IOException {
+        int constantPoolCount = dis.readUnsignedShort();
+        System.out.println("常量池数量：" + constantPoolCount);
+        for (int i = 1; i < constantPoolCount; i++) {
+            int tag = dis.readUnsignedByte();
+            ConstantVerbose constantVerbose = ConstantVerboseFactory.createConstant(tag, dis);
+            ConstantArrayDotItem item = constantVerbose.createDotItem(i, classDot);
+            classDot.addConstantItem(i, item);
+            classDot.addChild("constant", item);
+            i += constantVerbose.getSkipCount();
+        }
     }
 
 

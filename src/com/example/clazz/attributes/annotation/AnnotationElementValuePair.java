@@ -1,6 +1,10 @@
 package com.example.clazz.attributes.annotation;
 
 import com.example.clazz.constant.ConstantVerbose;
+import com.example.clazz.dot.ArrayDotItem;
+import com.example.clazz.dot.ClassDot;
+import com.example.clazz.dot.DotItem;
+import com.example.clazz.dot.DotStyle;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -14,10 +18,10 @@ public class AnnotationElementValuePair {
     public int elementNameIndex;
     public AnnotationElementValue value;
 
-    public void read(DataInputStream dis, Map<String, ConstantVerbose> constants) throws IOException {
+    public void read(DataInputStream dis) throws IOException {
         elementNameIndex = dis.readUnsignedShort();
         value = new AnnotationElementValue();
-        value.read(dis, constants);
+        value.read(dis);
     }
 
     public void print(String parent, int i, StringBuffer sb) {
@@ -29,5 +33,16 @@ public class AnnotationElementValuePair {
         value.print(currentNodeName, sb);
         sb.append(currentNodeName + " -> " + currentNodeName + "_value[label=\"value\"]");
         sb.append(";\n");
+    }
+
+    public DotItem createDotItem(ClassDot classDot, ArrayDotItem parent, int index) {
+        ArrayDotItem elemValuePairDot = new ArrayDotItem("element_value_pair", index, "")
+                .parent(parent).style(DotStyle.DASHED);
+
+        elemValuePairDot.addChild("elementName", classDot.getConstantItem(elementNameIndex));
+
+        DotItem item = value.createDotItem(classDot, elemValuePairDot, 0);
+        elemValuePairDot.addChild("value", item);
+        return null;
     }
 }

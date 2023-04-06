@@ -2,6 +2,9 @@ package com.example.clazz.attributes;
 
 import com.example.clazz.attributes.annotation.AnnotationElement;
 import com.example.clazz.constant.ConstantVerbose;
+import com.example.clazz.dot.ClassDot;
+import com.example.clazz.dot.DotItem;
+import com.example.clazz.dot.DotStyle;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -11,28 +14,32 @@ public class RuntimeVisibleAnnotationsAttributeVerbose extends AttributeVerbose 
     int numAnnotations;
     AnnotationElement[] elements;
 
-    public RuntimeVisibleAnnotationsAttributeVerbose(String parentTag, Map<String, ConstantVerbose> constants, int attributeNameIndex) {
-        super(parentTag, constants, attributeNameIndex);
-    }
-
-    @Override
-    public void readAttribute(int attributeLength, DataInputStream dataInputStream) throws IOException {
-        numAnnotations = dataInputStream.readUnsignedShort();
+    public RuntimeVisibleAnnotationsAttributeVerbose(int attributeNameIndex, String attributeName, DataInputStream dis) throws IOException {
+        super(attributeNameIndex, attributeName, dis);
+        numAnnotations = dis.readUnsignedShort();
         elements = new AnnotationElement[numAnnotations];
         for (int i = 0; i < numAnnotations; i++) {
             elements[i] = new AnnotationElement();
-            elements[i].read(dataInputStream, constants);
+            elements[i].read(dis);
         }
     }
 
     @Override
-    public void print(String parent, StringBuffer sb) {
-        super.print(parent, sb);
+    public DotItem createDotItem(ClassDot classDot, DotItem parent, int index) {
+        DotItem superItem = super.createDotItem(classDot, parent, index);
+
+        DotItem numItem = new DotItem("number", String.valueOf(numAnnotations))
+                .parent(superItem);
+        superItem.addChild("num", numItem);
+
+//        DotItem elementsItem = new DotItem("elements", "")
+//                .parent(superItem).style(DotStyle.DASHED);
+//        superItem.addChild("", elementsItem);
         for (int i = 0; i < numAnnotations; i++) {
-            elements[i].print(getCurrentNodeName(), i, sb);
-            sb.append(getCurrentNodeName() + " -> " + getCurrentNodeName() + "_" + i + "[label=\"annotation" + i + "\"]");
-            sb.append(";\n");
+            DotItem item = elements[i].createDotItem(classDot, superItem, i);
+            superItem.addChild("", item);
         }
 
+        return superItem;
     }
 }
