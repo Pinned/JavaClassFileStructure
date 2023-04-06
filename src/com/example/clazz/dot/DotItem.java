@@ -5,12 +5,14 @@ import java.awt.*;
 import java.util.*;
 
 public class DotItem {
-    public DotShape shape = DotShape.CIRCLE;
+    public DotShape shape = DotShape.ELLIPSE;
     public DotStyle style = DotStyle.DEFAULT;
     public Color color = Color.BLACK;
     public DotItem parentDot = null;
     public String name;
     public String showValue;
+
+    private boolean isPrint = false;
 
 
     public DotItem(String name, String showValue) {
@@ -18,17 +20,17 @@ public class DotItem {
         this.showValue = showValue;
     }
 
-    public <T extends DotItem> T  shape(DotShape shape) {
+    public <T extends DotItem> T shape(DotShape shape) {
         this.shape = shape;
         return (T) this;
     }
 
-    public <T extends DotItem> T  style(DotStyle style) {
+    public <T extends DotItem> T style(DotStyle style) {
         this.style = style;
         return (T) this;
     }
 
-    public <T extends DotItem> T  color(Color color) {
+    public <T extends DotItem> T color(Color color) {
         this.color = color;
         return (T) this;
     }
@@ -39,7 +41,7 @@ public class DotItem {
     }
 
 
-    public Set<DotItem> childDots = new HashSet<>();
+    public LinkedHashSet<DotItem> childDots = new LinkedHashSet<>();
     public Map<DotItem, String> childLabels = new HashMap<>();
 
 
@@ -69,6 +71,10 @@ public class DotItem {
             sb.append(",");
             sb.append("style=" + this.style.name().toLowerCase());
         }
+        if (this.style == DotStyle.FILLED) {
+            sb.append(",");
+            sb.append("fontcolor=WHITE" );
+        }
 
         sb.append(",");
         sb.append("color=\"" + getHexColor(this.color) + "\"");
@@ -81,13 +87,17 @@ public class DotItem {
     }
 
 
-    @Override
-    public String toString() {
+    public String toDotGraph() {
+        if (isPrint) {
+            return "";
+        }
+        isPrint = true;
         StringBuffer sb = new StringBuffer();
         sb.append(this.getNodeName() + "[" + this.generateCurrentNodeDescription() + "];");
         sb.append("\n");
+
         for (DotItem childDot : childDots) {
-            String childShow = childDot.toString();
+            String childShow = childDot.toDotGraph();
             sb.append(childShow);
             sb.append("\n");
             // 添加一条边

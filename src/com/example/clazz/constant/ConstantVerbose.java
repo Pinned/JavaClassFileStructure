@@ -22,6 +22,10 @@ public interface ConstantVerbose {
         }
         ConstantArrayDotItem item = new ConstantArrayDotItem(index, showLabel);
         item.constant = this;
+        return item;
+    }
+
+    default void updateConstantIndex(DotItem item, ClassDot classDot) {
         Field[] allFields = this.getClass().getDeclaredFields();
         int i = 0;
         for (Field field : allFields) {
@@ -38,7 +42,6 @@ public interface ConstantVerbose {
                 // 没有直接跳过
             }
         }
-        return item;
     }
 
     default String getValue() {

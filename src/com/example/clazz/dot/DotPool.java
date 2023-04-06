@@ -11,8 +11,7 @@ public class DotPool {
         dotItems.add(dotItem);
     }
 
-    @Override
-    public String toString() {
+    public String toDotGraph() {
         StringBuffer sb = new StringBuffer();
         for (DotItem dotItem : dotItems) {
             sb.append(dotItem.toString());

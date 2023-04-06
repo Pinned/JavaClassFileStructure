@@ -8,7 +8,7 @@ import com.example.clazz.format.Main;
 
 import java.awt.*;
 import java.io.*;
-import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 
 public class PrintJavaClassFile {
@@ -18,6 +18,8 @@ public class PrintJavaClassFile {
         String projectPath = System.getProperty("user.dir");
         System.out.println("当前项目的根目录：" + projectPath);
         File file = new File(projectPath, "class_info");
+//        File mainFile = new File(file, "Main.class");
+//        parseClassFile(projectPath, mainFile.getAbsolutePath(), mainFile.getName());
         for (File listFile : file.listFiles()) {
             if (listFile.isFile() && listFile.getName().endsWith(".class")) {
                 System.out.println();
@@ -59,7 +61,7 @@ public class PrintJavaClassFile {
         String classFileName = classFile.getName().replace(".class", "");
 
 
-        writeToFile(projectPath + "/class_info/output/" + classFileName + ".dot", classDot.toString());
+        writeToFile(projectPath + "/class_info/output/" + classFileName + ".dot", classDot.toDotGraph());
         dis.close();
         fis.close();
 
@@ -98,7 +100,8 @@ public class PrintJavaClassFile {
 
             DotItem fieldItem = new DotItem("field_" + i, "字段" + i)
                     .style(DotStyle.FILLED)
-                    .shape(DotShape.BOX);
+                    .shape(DotShape.BOX)
+                    ;
             DotItem fieldAccessFlag = new DotItem("access_flg", FieldAccessFlagsUtil.getAccessFlagDetail(accessFlags))
                     .parent(fieldItem);
             fieldItem.addChild("access", fieldAccessFlag);
@@ -152,21 +155,36 @@ public class PrintJavaClassFile {
         // 读取 access flag \ this class \ super class
         int classAccessFlags = dis.readUnsignedShort();
         System.out.println("访问标志：" + ClassAccessFlagsUtil.getAccessFlagDetail(classAccessFlags));
-        DotItem item = new DotItem("class_access_flags", ClassAccessFlagsUtil.getAccessFlagDetail(classAccessFlags));
+        DotItem item = new DotItem("class_access_flags", ClassAccessFlagsUtil.getAccessFlagDetail(classAccessFlags))
+                .shape(DotShape.BOX);
         classDot.addChild("", item);
     }
 
     private static void readConstantPool(DataInputStream dis, ClassDot classDot) throws IOException {
         int constantPoolCount = dis.readUnsignedShort();
         System.out.println("常量池数量：" + constantPoolCount);
+        LinkedHashSet<ConstantVerbose> allVerbose = new LinkedHashSet<>();
         for (int i = 1; i < constantPoolCount; i++) {
             int tag = dis.readUnsignedByte();
             ConstantVerbose constantVerbose = ConstantVerboseFactory.createConstant(tag, dis);
-            ConstantArrayDotItem item = constantVerbose.createDotItem(i, classDot);
-            classDot.addConstantItem(i, item);
-            classDot.addChild("constant", item);
+            allVerbose.add(constantVerbose);
             i += constantVerbose.getSkipCount();
         }
+
+        int index = 1;
+        for (ConstantVerbose constantVerbose : allVerbose) {
+            ConstantArrayDotItem item = constantVerbose.createDotItem(index, classDot);
+            classDot.addConstantItem(index, item);
+            classDot.addChild("constant", item);
+            index++;
+            index += constantVerbose.getSkipCount();
+        }
+
+        for (Map.Entry<String, ConstantArrayDotItem> entry : classDot.allConstantItem.entrySet()) {
+            ConstantArrayDotItem item = entry.getValue();
+            item.constant.updateConstantIndex(item, classDot);
+        }
+
     }
 
 

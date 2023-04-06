@@ -17,7 +17,7 @@ public abstract class AttributeVerbose {
 
 
     public DotItem createDotItem(ClassDot classDot, DotItem parent, int index) {
-        DotItem item = new DotItem("attribute", "")
+        DotItem item = new DotItem("attribute_" + index, "")
                 .parent(parent).style(DotStyle.DASHED);
         item.addChild("attributeName", classDot.getConstantItem(attributeNameIndex));
 

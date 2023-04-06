@@ -19,8 +19,13 @@ class MethodHandleConstantVerbose implements ConstantVerbose {
     @Override
     public ConstantArrayDotItem createDotItem(int index, ClassDot classDot) {
         ConstantArrayDotItem item = new ConstantArrayDotItem(index, "MethodHandle(" + methodHandleKind + ")");
-        item.addChild("methodHandle", classDot.getConstantItem(methodHandleIndex));
+        item.constant = this;
         return item;
+    }
+
+    @Override
+    public void updateConstantIndex(DotItem item, ClassDot classDot) {
+        item.addChild("methodHandle", classDot.getConstantItem(methodHandleIndex));
     }
 
     @Override

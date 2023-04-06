@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class ClassDot {
     public DotItem rootItem;
-    Map<String, ConstantArrayDotItem> allConstantItem = new HashMap<>();
+    public Map<String, ConstantArrayDotItem> allConstantItem = new HashMap<>();
 
     public ClassDot(String className) {
         this.rootItem = new DotItem("class", className);
@@ -30,11 +30,13 @@ public class ClassDot {
     }
 
 
-    @Override
-    public String toString() {
+    public String toDotGraph() {
         StringBuffer sb = new StringBuffer();
         sb.append("digraph class_file { \n");
-        sb.append(rootItem.toString());
+        for (DotItem childDot : rootItem.childDots) {
+            sb.append(childDot.toDotGraph());
+        }
+//        sb.append(rootItem.toDotGraph());
         sb.append("}");
         return sb.toString();
     }
