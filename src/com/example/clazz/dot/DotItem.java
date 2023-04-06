@@ -65,7 +65,7 @@ public class DotItem {
         sb.append("label=\"" + this.getShowValue() + "\"");
         sb.append(",");
         sb.append("shape=" + this.shape.getShowName());
-        if (this.style != DotStyle.FILLED) {
+        if (this.style != DotStyle.DEFAULT) {
             sb.append(",");
             sb.append("style=" + this.style.name().toLowerCase());
         }
