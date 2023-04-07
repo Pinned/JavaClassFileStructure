@@ -1,10 +1,7 @@
 package com.example.clazz.attributes.annotation;
 
 import com.example.clazz.constant.ConstantVerbose;
-import com.example.clazz.dot.ArrayDotItem;
-import com.example.clazz.dot.ClassDot;
-import com.example.clazz.dot.DotItem;
-import com.example.clazz.dot.DotStyle;
+import com.example.clazz.dot.*;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -37,7 +34,7 @@ public class AnnotationElementValuePair {
 
     public DotItem createDotItem(ClassDot classDot, ArrayDotItem parent, int index) {
         ArrayDotItem elemValuePairDot = new ArrayDotItem("element_value_pair", index, "")
-                .parent(parent).style(DotStyle.DASHED);
+                .parent(parent).style(DotStyle.DASHED).shape(DotShape.CIRCLE);
 
         elemValuePairDot.addChild("elementName", classDot.getConstantItem(elementNameIndex));
 

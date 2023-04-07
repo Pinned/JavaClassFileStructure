@@ -1,10 +1,7 @@
 package com.example.clazz.attributes;
 
 import com.example.clazz.constant.ConstantVerbose;
-import com.example.clazz.dot.ClassDot;
-import com.example.clazz.dot.ConstantArrayDotItem;
-import com.example.clazz.dot.DotItem;
-import com.example.clazz.dot.DotStyle;
+import com.example.clazz.dot.*;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -18,7 +15,7 @@ public abstract class AttributeVerbose {
 
     public DotItem createDotItem(ClassDot classDot, DotItem parent, int index) {
         DotItem item = new DotItem("attribute_" + index, "")
-                .parent(parent).style(DotStyle.DASHED);
+                .parent(parent).style(DotStyle.DASHED).shape(DotShape.CIRCLE);
         item.addChild("attributeName", classDot.getConstantItem(attributeNameIndex));
 
         DotItem length = new DotItem("length", attributeLength + " Byte")

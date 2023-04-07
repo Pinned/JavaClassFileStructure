@@ -1,10 +1,7 @@
 package com.example.clazz.attributes.annotation;
 
 import com.example.clazz.constant.ConstantVerbose;
-import com.example.clazz.dot.ArrayDotItem;
-import com.example.clazz.dot.ClassDot;
-import com.example.clazz.dot.DotItem;
-import com.example.clazz.dot.DotStyle;
+import com.example.clazz.dot.*;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -84,7 +81,7 @@ public class AnnotationElementValue {
 
     public DotItem createDotItem(ClassDot classDot, ArrayDotItem parent, int index) {
         ArrayDotItem item = new ArrayDotItem("value", index, "value")
-                .parent(parent).style(DotStyle.DASHED);
+                .parent(parent).style(DotStyle.DASHED).shape(DotShape.CIRCLE);
         switch (tag) {
             case 'B':
             case 'C':
