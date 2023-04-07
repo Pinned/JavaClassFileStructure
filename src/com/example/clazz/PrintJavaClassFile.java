@@ -71,6 +71,9 @@ public class PrintJavaClassFile {
         generateGraph(projectPath, classFileName + "Method", classDot.toDotGraph("method"));
         classDot.resetPrintStatus();
         generateGraph(projectPath, classFileName + "Attribute", classDot.toDotGraph("attribute"));
+        classDot.resetPrintStatus();
+        generateGraph(projectPath, classFileName + "Attribute_1", classDot.toDotGraph("attribute", 1));
+
     }
 
     private static void generateGraph(String projectPath, String fileName, String graph) throws IOException {

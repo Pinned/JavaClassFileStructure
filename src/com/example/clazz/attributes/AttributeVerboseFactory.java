@@ -1,6 +1,7 @@
 package com.example.clazz.attributes;
 
 import com.example.clazz.attributes.annotation.*;
+import com.example.clazz.attributes.innerclass.InnerClassAttributeVerbose;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -39,6 +40,9 @@ public class AttributeVerboseFactory {
                 break;
             case "EnclosingMethod":
                 verbose = new EnclosingMethodAttributeVerbose(attributeNameIndex, name, dis);
+                break;
+            case "InnerClasses":
+                verbose = new InnerClassAttributeVerbose(attributeNameIndex, name, dis);
                 break;
 //
             default:

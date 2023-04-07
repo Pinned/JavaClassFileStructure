@@ -53,6 +53,25 @@ public class ClassDot {
         return sb.toString();
     }
 
+
+    public String toDotGraph(String prefix, int index) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("digraph class_file { \n");
+        for (DotItem childDot : rootItem.childDots) {
+            if (childDot.isNodeNameStart(prefix)) {
+                int curr = 0;
+                for (DotItem dot : childDot.childDots) {
+                    if (curr == index) {
+                        sb.append(dot.toDotGraph());
+                    }
+                    curr ++;
+                }
+            }
+        }
+        sb.append("}");
+        return sb.toString();
+    }
+
     public void resetPrintStatus() {
         resetPrintStatus(rootItem);
     }
