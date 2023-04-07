@@ -1,9 +1,6 @@
 package com.example.clazz.attributes;
 
-import com.example.clazz.attributes.annotation.RuntimeInvisibleAnnotationsAttributeVerbose;
-import com.example.clazz.attributes.annotation.RuntimeInvisibleParameterAnnotationsAttributeVerbose;
-import com.example.clazz.attributes.annotation.RuntimeVisibleAnnotationsAttributeVerbose;
-import com.example.clazz.attributes.annotation.RuntimeVisibleParameterAnnotationsAttributeVerbose;
+import com.example.clazz.attributes.annotation.*;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -33,6 +30,9 @@ public class AttributeVerboseFactory {
                 break;
             case "RuntimeInvisibleParameterAnnotations":
                 verbose = new RuntimeInvisibleParameterAnnotationsAttributeVerbose(attributeNameIndex, name, dis);
+                break;
+            case "AnnotationDefault":
+                verbose = new AnnotationDefaultAttributeVerbose(attributeNameIndex, name, dis);
                 break;
             case "Signature":
                 verbose = new SignatureAttributeVerbose(attributeNameIndex, name, dis);

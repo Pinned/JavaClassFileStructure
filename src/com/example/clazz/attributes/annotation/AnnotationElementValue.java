@@ -79,7 +79,7 @@ public class AnnotationElementValue {
 
     }
 
-    public DotItem createDotItem(ClassDot classDot, ArrayDotItem parent, int index) {
+    public DotItem createDotItem(ClassDot classDot, DotItem parent, int index) {
         ArrayDotItem item = new ArrayDotItem("value", index, "value")
                 .parent(parent).style(DotStyle.DASHED).shape(DotShape.CIRCLE);
         switch (tag) {
