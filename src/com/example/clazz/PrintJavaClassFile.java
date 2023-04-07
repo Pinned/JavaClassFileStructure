@@ -18,8 +18,8 @@ public class PrintJavaClassFile {
         String projectPath = System.getProperty("user.dir");
         System.out.println("当前项目的根目录：" + projectPath);
         File file = new File(projectPath, "class_info");
-        File mainFile = new File(file, "IntRange.class");
-        parseClassFile(projectPath, mainFile.getAbsolutePath(), mainFile.getName());
+//        File mainFile = new File(file, "IntRange.class");
+//        parseClassFile(projectPath, mainFile.getAbsolutePath(), mainFile.getName());
         for (File listFile : file.listFiles()) {
             if (listFile.isFile() && listFile.getName().endsWith(".class")) {
                 System.out.println();
@@ -80,7 +80,7 @@ public class PrintJavaClassFile {
             ArrayDotItem methodDotItem = new ArrayDotItem("method", i, "方法" + i)
                     .style(DotStyle.FILLED)
                     .shape(DotShape.BOX);
-            DotItem fieldAccessFlag = new DotItem("access_flg", FieldAccessFlagsUtil.getAccessFlagDetail(accessFlags))
+            DotItem fieldAccessFlag = new DotItem("access_flg", MethodAccessFlagsUtil.getAccessFlagDetail(accessFlags))
                     .parent(methodDotItem);
             methodDotItem.addChild("access", fieldAccessFlag);
             methodDotItem.addChild("name", classDot.getConstantItem(nameIndex));
@@ -117,7 +117,7 @@ public class PrintJavaClassFile {
     private static void readAttribute(DataInputStream dis, ClassDot classDot, DotItem parent) throws IOException {
         int attributesCount = dis.readUnsignedShort();
         DotItem attributeCountDot = new DotItem("attribute_count", String.valueOf(attributesCount))
-                .parent(parent).style(DotStyle.DASHED);
+                .parent(parent).style(DotStyle.DASHED).shape(DotShape.CIRCLE);
         parent.addChild("attribute", attributeCountDot);
 
         for (int j = 0; j < attributesCount; j++) {
@@ -154,7 +154,7 @@ public class PrintJavaClassFile {
     private static void readClassAccessFlag(DataInputStream dis, ClassDot classDot) throws IOException {
         // 读取 access flag \ this class \ super class
         int classAccessFlags = dis.readUnsignedShort();
-        System.out.println("访问标志：" + ClassAccessFlagsUtil.getAccessFlagDetail(classAccessFlags));
+        System.out.println("类访问标志：" + ClassAccessFlagsUtil.getAccessFlagDetail(classAccessFlags));
         DotItem item = new DotItem("class_access_flags", ClassAccessFlagsUtil.getAccessFlagDetail(classAccessFlags))
                 .shape(DotShape.BOX);
         classDot.addChild("", item);
@@ -167,6 +167,7 @@ public class PrintJavaClassFile {
         for (int i = 1; i < constantPoolCount; i++) {
             int tag = dis.readUnsignedByte();
             ConstantVerbose constantVerbose = ConstantVerboseFactory.createConstant(tag, dis);
+            constantVerbose.printInConsole(i);
             allVerbose.add(constantVerbose);
             i += constantVerbose.getSkipCount();
         }
