@@ -29,3 +29,4 @@ out/
 *.ipr
 *.iws
 *.dot
+.DS_Store
