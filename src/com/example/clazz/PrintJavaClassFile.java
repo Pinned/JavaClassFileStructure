@@ -56,19 +56,30 @@ public class PrintJavaClassFile {
 
         readAttribute(dis, classDot, classDot.rootItem);
 
+        dis.close();
+        fis.close();
+
         // 获取当前 Class 文件名称
         File classFile = new File(filePath);
         String classFileName = classFile.getName().replace(".class", "");
 
 
-        writeToFile(projectPath + "/class_info/output/" + classFileName + ".dot", classDot.toDotGraph());
-        dis.close();
-        fis.close();
+        generateGraph(projectPath, classFileName, classDot.toDotGraph());
+        classDot.resetPrintStatus();
+        generateGraph(projectPath, classFileName + "Field", classDot.toDotGraph("field"));
+        classDot.resetPrintStatus();
+        generateGraph(projectPath, classFileName + "Method", classDot.toDotGraph("method"));
+        classDot.resetPrintStatus();
+        generateGraph(projectPath, classFileName + "Attribute", classDot.toDotGraph("attribute"));
+    }
 
+    private static void generateGraph(String projectPath, String fileName, String graph) throws IOException {
+        writeToFile(projectPath + "/class_info/output/" + fileName + ".dot", graph);
         // 执行命令
-        String cmd = "dot -Tpng " + projectPath + "/class_info/output/" + classFileName + ".dot -o " + projectPath + "/class_info/output/" + classFileName + ".png";
+        String cmd = "dot -Tpng " + projectPath + "/class_info/output/" + fileName + ".dot -o " + projectPath + "/class_info/output/" + fileName + ".png";
         Runtime.getRuntime().exec(cmd);
     }
+
 
     private static void readMethod(DataInputStream dis, ClassDot classDot) throws IOException {
         int methodCount = dis.readUnsignedShort();
@@ -100,8 +111,7 @@ public class PrintJavaClassFile {
 
             DotItem fieldItem = new DotItem("field_" + i, "字段" + i)
                     .style(DotStyle.FILLED)
-                    .shape(DotShape.BOX)
-                    ;
+                    .shape(DotShape.BOX);
             DotItem fieldAccessFlag = new DotItem("access_flg", FieldAccessFlagsUtil.getAccessFlagDetail(accessFlags))
                     .parent(fieldItem);
             fieldItem.addChild("access", fieldAccessFlag);

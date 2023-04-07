@@ -40,4 +40,28 @@ public class ClassDot {
         sb.append("}");
         return sb.toString();
     }
+
+    public String toDotGraph(String prefix) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("digraph class_file { \n");
+        for (DotItem childDot : rootItem.childDots) {
+            if (childDot.isNodeNameStart(prefix)) {
+                sb.append(childDot.toDotGraph());
+            }
+        }
+        sb.append("}");
+        return sb.toString();
+    }
+
+    public void resetPrintStatus() {
+        resetPrintStatus(rootItem);
+    }
+
+    private void resetPrintStatus(DotItem item) {
+        item.isPrint = false;
+        for (DotItem childDot : item.childDots) {
+            resetPrintStatus(childDot);
+        }
+    }
+
 }

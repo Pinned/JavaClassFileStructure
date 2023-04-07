@@ -12,7 +12,7 @@ public class DotItem {
     public String name;
     public String showValue;
 
-    private boolean isPrint = false;
+    public boolean isPrint = false;
 
 
     public DotItem(String name, String showValue) {
@@ -56,6 +56,10 @@ public class DotItem {
             dotName = parentDot.getNodeName() + "_" + dotName;
         }
         return dotName;
+    }
+
+    public boolean isNodeNameStart(String prefix) {
+        return this.name.startsWith(prefix);
     }
 
     public String getShowValue() {
