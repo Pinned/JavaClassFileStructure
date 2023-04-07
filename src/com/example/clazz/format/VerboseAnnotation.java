@@ -15,4 +15,12 @@ public class VerboseAnnotation {
     public void setValue(@IntRange(from = 40, to = 60) int value, @IntRange(from = 20, to = 30) int other) {
         this.value = value;
     }
+
+    @ViewHolder(value = VerboseAttributes.class)
+    public int other;
+
+    @ViewHolder(value = VerboseAttributes.class)
+    public void setOther(@ViewHolder(value = VerboseAttributes.class) int other) {
+
+    }
 }
