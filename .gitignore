@@ -30,3 +30,4 @@ out/
 *.iws
 *.dot
 .DS_Store
+class_info/*/*.png
