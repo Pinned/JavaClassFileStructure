@@ -64,12 +64,21 @@ public class ClassDot {
                     if (curr == index) {
                         sb.append(dot.toDotGraph());
                     }
-                    curr ++;
+                    curr++;
                 }
             }
         }
         sb.append("}");
         return sb.toString();
+    }
+
+    public int getSubChildCount(String prefix) {
+        for (DotItem childDot : rootItem.childDots) {
+            if (childDot.isNodeNameStart(prefix)) {
+                return childDot.childDots.size();
+            }
+        }
+        return 0;
     }
 
     public void resetPrintStatus() {

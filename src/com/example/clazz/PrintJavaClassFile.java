@@ -71,8 +71,12 @@ public class PrintJavaClassFile {
         generateGraph(projectPath, classFileName + "Method", classDot.toDotGraph("method"));
         classDot.resetPrintStatus();
         generateGraph(projectPath, classFileName + "Attribute", classDot.toDotGraph("attribute"));
-        classDot.resetPrintStatus();
-        generateGraph(projectPath, classFileName + "Attribute_1", classDot.toDotGraph("attribute", 1));
+        int attributeCount = classDot.getSubChildCount("attribute");
+        for (int i = 0; i < attributeCount; i++) {
+            classDot.resetPrintStatus();
+            generateGraph(projectPath, classFileName + "Attribute_" + i, classDot.toDotGraph("attribute", i));
+        }
+
 
     }
 
