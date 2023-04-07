@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 public class VerboseSignature<T> {
-    public T parameterizedVerbose;
-    Map<String, Integer> map;
+    public T typeVariable;
+    Map<String, Integer> parameterizedType;
 
     public void setupSuperParams(List<? super ClassFormat> data) {
 
