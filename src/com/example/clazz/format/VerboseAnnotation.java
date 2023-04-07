@@ -1,6 +1,8 @@
 package com.example.clazz.format;
 
 
+@IntRange(from = 80, to = 90)
+@Deprecated
 public class VerboseAnnotation {
 
     @Deprecated
