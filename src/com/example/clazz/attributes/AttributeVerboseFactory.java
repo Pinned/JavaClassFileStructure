@@ -37,24 +37,10 @@ public class AttributeVerboseFactory {
             case "Signature":
                 verbose = new SignatureAttributeVerbose(attributeNameIndex, name, dis);
                 break;
-//            case "Exceptions":
-//                verbose = new ExceptionsAttributeVerbose(constants, attributeNameIndex);
-//                break;
-//            case "InnerClasses":
-//                verbose = new InnerClassesAttributeVerbose(constants, attributeNameIndex);
-//                break;
-//            case "LineNumberTable":
-//                verbose = new LineNumberTableAttributeVerbose(constants, attributeNameIndex);
-//                break;
-//            case "LocalVariableTable":
-//                verbose = new LocalVariableTableAttributeVerbose(constants, attributeNameIndex);
-//                break;
-//            case "SourceFile":
-//                verbose = new SourceFileAttributeVerbose(constants, attributeNameIndex);
-//                break;
-//            case "Synthetic":
-//                verbose = new SyntheticAttributeVerbose(constants, attributeNameIndex);
-//                break;
+            case "EnclosingMethod":
+                verbose = new EnclosingMethodAttributeVerbose(attributeNameIndex, name, dis);
+                break;
+//
             default:
                 verbose = new UnknownAttributeVerbose(attributeNameIndex, name, dis);
                 break;
