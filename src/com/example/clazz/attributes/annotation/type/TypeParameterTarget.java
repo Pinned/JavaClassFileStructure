@@ -17,6 +17,6 @@ public class TypeParameterTarget {
     }
 
     public DotItem createDotItem(ClassDot classDot, ArrayDotItem typeAnnotationDot, int i) {
-        return new DotItem("type_parameter_index", typeParameterIndex + "");
+        return new DotItem("type_parameter_index", typeParameterIndex + "").parent(typeAnnotationDot);
     }
 }

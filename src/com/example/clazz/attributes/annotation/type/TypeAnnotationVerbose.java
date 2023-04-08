@@ -158,7 +158,10 @@ public class TypeAnnotationVerbose {
     public DotItem createDotItem(ClassDot classDot, DotItem superDotItem, int index) {
         ArrayDotItem typeAnnotationDot = new ArrayDotItem("type_annotation", index, "")
                 .parent(superDotItem).style(DotStyle.DASHED).shape(DotShape.CIRCLE);
-        typeAnnotationDot.addChild("targetType", new DotItem("targetType", "0x" + Integer.toHexString(targetType) + "\\n" + getReadableTargetType()).shape(DotShape.BOX));
+        typeAnnotationDot.addChild("targetType",
+                new DotItem("targetType", "0x" + Integer.toHexString(targetType) + "\\n" + getReadableTargetType())
+                        .parent(typeAnnotationDot)
+                        .shape(DotShape.BOX));
 
         switch (targetType) {
             case 0x00:
@@ -207,7 +210,8 @@ public class TypeAnnotationVerbose {
         }
         typeAnnotationDot.addChild("type_path", typePath.createDotItem(classDot, typeAnnotationDot, 0));
         typeAnnotationDot.addChild("type", classDot.getConstantItem(typeIndex));
-        typeAnnotationDot.addChild("num_element_value_pairs", new DotItem("num_element_value_pairs", String.valueOf(numElementValuePairs)));
+        typeAnnotationDot.addChild("num_element_value_pairs",
+                new DotItem("num_element_value_pairs", String.valueOf(numElementValuePairs)).parent(typeAnnotationDot));
         for (int i = 0; i < numElementValuePairs; i++) {
             typeAnnotationDot.addChild("", elementValuePairs[i].createDotItem(classDot, typeAnnotationDot, i));
         }

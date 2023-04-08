@@ -18,6 +18,6 @@ public class SupertypeTarget {
     }
 
     public DotItem createDotItem(ClassDot classDot, ArrayDotItem typeAnnotationDot, int i) {
-        return new DotItem("supertype_index", supertypeIndex + "");
+        return new DotItem("supertype_index", supertypeIndex + "").parent(typeAnnotationDot);
     }
 }

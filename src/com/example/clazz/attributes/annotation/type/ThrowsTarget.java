@@ -18,6 +18,6 @@ public class ThrowsTarget {
     }
 
     public DotItem createDotItem(ClassDot classDot, ArrayDotItem typeAnnotationDot, int i) {
-        return new DotItem("throws_type_index", throwsTypeIndex + "");
+        return new DotItem("throws_type_index", throwsTypeIndex + "").parent(typeAnnotationDot);
     }
 }

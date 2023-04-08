@@ -20,6 +20,7 @@ public class TypeParameterBoundTarget {
 
     public DotItem createDotItem(ClassDot classDot, ArrayDotItem typeAnnotationDot, int i) {
         DotItem item = new DotItem("type_parameter_bound_target", "")
+                .parent(typeAnnotationDot)
                 .shape(DotShape.CIRCLE).style(DotStyle.DASHED);
         item.addChild("type_parameter_index", new DotItem("type_parameter_index", typeParameterIndex + ""));
         item.addChild("bound_index", new DotItem("bound_index", boundIndex + ""));

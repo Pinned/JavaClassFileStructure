@@ -18,6 +18,6 @@ public class CatchTarget {
     }
 
     public DotItem createDotItem(ClassDot classDot, ArrayDotItem typeAnnotationDot, int i) {
-        return new DotItem("exception_table_index", exceptionTableIndex + "");
+        return new DotItem("exception_table_index", exceptionTableIndex + "").parent(typeAnnotationDot);
     }
 }

@@ -18,6 +18,6 @@ public class OffsetTarget {
     }
 
     public DotItem createDotItem(ClassDot classDot, ArrayDotItem typeAnnotationDot, int i) {
-        return new DotItem("offset", offset + "");
+        return new DotItem("offset", offset + "").parent(typeAnnotationDot);
     }
 }

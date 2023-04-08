@@ -12,6 +12,6 @@ public class EmptyTarget {
     }
 
     public DotItem createDotItem(ClassDot classDot, ArrayDotItem typeAnnotationDot, int i) {
-        return new DotItem("empty_target", "empty_target");
+        return new DotItem("empty_target", "empty_target").parent(typeAnnotationDot);
     }
 }

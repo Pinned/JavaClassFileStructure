@@ -23,6 +23,7 @@ public class LocalvarTargetTable {
 
     public DotItem createDotItem(ClassDot classDot, ArrayDotItem typeAnnotationDot, int i) {
         ArrayDotItem localvarTargetTable = new ArrayDotItem("localvar_target_table", i, "")
+                .parent(typeAnnotationDot)
                 .shape(DotShape.CIRCLE).style(DotStyle.DASHED);
         localvarTargetTable.addChild("start_pc", new DotItem("start_pc", startPc + ""));
         localvarTargetTable.addChild("length", new DotItem("length", length + ""));

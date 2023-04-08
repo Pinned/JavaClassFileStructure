@@ -6,7 +6,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 
 public class TypePath {
-//    {
+    //    {
 //        u1 path_length;
 //        {   u1 type_path_kind;
 //            u1 type_argument_index;
@@ -24,11 +24,13 @@ public class TypePath {
     }
 
     public DotItem createDotItem(ClassDot classDot, ArrayDotItem typeAnnotationDot, int i) {
-        DotItem typePathDot = new DotItem("type_path", "")
+        ArrayDotItem typePathDot = new ArrayDotItem("type_path", i, "")
+                .parent(typeAnnotationDot)
                 .shape(DotShape.CIRCLE).style(DotStyle.DASHED);
-        typePathDot.addChild("path_length", new DotItem("path_length", pathLength + ""));
+        typePathDot.addChild("path_length",
+                new DotItem("path_length", pathLength + "").parent(typePathDot));
         for (int j = 0; j < pathLength; j++) {
-            typePathDot.addChild("path[" + j + "]", path[j].createDotItem(classDot, typeAnnotationDot, j));
+            typePathDot.addChild("path[" + j + "]", path[j].createDotItem(classDot, typePathDot, j));
         }
         return typePathDot;
     }

@@ -21,6 +21,7 @@ public class TypeArgumentTarget {
 
     public DotItem createDotItem(ClassDot classDot, ArrayDotItem typeAnnotationDot, int i) {
         DotItem typeArgumentTargetDot = new DotItem("type_argument_target", "")
+                .parent(typeAnnotationDot)
                 .shape(DotShape.CIRCLE).style(DotStyle.DASHED);
         typeArgumentTargetDot.addChild("offset", new DotItem("offset", offset + ""));
         typeArgumentTargetDot.addChild("type_argument_index", new DotItem("type_argument_index", typeArgumentIndex + ""));

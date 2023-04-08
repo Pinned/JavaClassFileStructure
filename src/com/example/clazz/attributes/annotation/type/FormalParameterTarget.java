@@ -18,6 +18,6 @@ public class FormalParameterTarget {
     }
 
     public DotItem createDotItem(ClassDot classDot, ArrayDotItem typeAnnotationDot, int i) {
-        return new DotItem("formal_parameter_index", formalParameterIndex + "");
+        return new DotItem("formal_parameter_index", formalParameterIndex + "").parent(typeAnnotationDot);
     }
 }
