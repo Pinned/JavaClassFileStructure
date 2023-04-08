@@ -72,6 +72,22 @@ public class ClassDot {
         return sb.toString();
     }
 
+    public String toDotFieldGraph(String prefix, int index) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("digraph class_file { \n");
+        int curr = 0;
+        for (DotItem childDot : rootItem.childDots) {
+            if (childDot.isNodeNameStart(prefix)) {
+                if (curr == index) {
+                    sb.append(childDot.toDotGraph());
+                }
+                curr++;
+            }
+        }
+        sb.append("}");
+        return sb.toString();
+    }
+
     public int getSubChildCount(String prefix) {
         for (DotItem childDot : rootItem.childDots) {
             if (childDot.isNodeNameStart(prefix)) {

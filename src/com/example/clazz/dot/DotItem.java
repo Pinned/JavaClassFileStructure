@@ -20,6 +20,10 @@ public class DotItem {
         this.showValue = showValue;
     }
 
+    public DotItem(String name, int showValue) {
+        this(name, String.valueOf(showValue));
+    }
+
     public <T extends DotItem> T shape(DotShape shape) {
         this.shape = shape;
         return (T) this;

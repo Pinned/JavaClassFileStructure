@@ -32,6 +32,12 @@ public class AttributeVerboseFactory {
             case "RuntimeInvisibleParameterAnnotations":
                 verbose = new RuntimeInvisibleParameterAnnotationsAttributeVerbose(attributeNameIndex, name, dis);
                 break;
+            case "RuntimeVisibleTypeAnnotations":
+                verbose = new RuntimeVisibleTypeAnnotationsAttributeVerbose(attributeNameIndex, name, dis);
+                break;
+            case "RuntimeInvisibleTypeAnnotations":
+                verbose = new RuntimeInvisibleTypeAnnotationsAttributeVerbose(attributeNameIndex, name, dis);
+                break;
             case "AnnotationDefault":
                 verbose = new AnnotationDefaultAttributeVerbose(attributeNameIndex, name, dis);
                 break;
