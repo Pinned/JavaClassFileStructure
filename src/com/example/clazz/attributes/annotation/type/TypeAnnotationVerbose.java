@@ -103,10 +103,62 @@ public class TypeAnnotationVerbose {
     }
 
 
+    public String getReadableTargetType() {
+        switch (targetType) {
+            case 0x00:
+                return "declaration of generic class or interface";
+            case 0x01:
+                return "declaration of generic method or constructor";
+            case 0x10:
+                return "extends or implements clause of class declaration (including the direct superclass or direct superinterface of an anonymous class declaration), or in extends clause of interface declaration";
+            case 0x11:
+                return "bound of type parameter declaration of generic class or interface";
+            case 0x12:
+                return "bound of type parameter declaration of generic method or constructor";
+            case 0x13:
+                return "field or record component declaration";
+            case 0x14:
+                return "return type of method, or type of newly constructed object";
+            case 0x15:
+                return "receiver type of method or constructor";
+
+            case 0x16:
+                return "type in formal parameter declaration of method, constructor, or lambda expression";
+            case 0x17:
+                return "type in throws clause of method or constructor";
+            case 0x40:
+                return "local variable declaration";
+            case 0x41:
+                return "resource variable declaration";
+            case 0x42:
+                return "exception parameter declaration";
+            case 0x43:
+                return "instanceof expression";
+            case 0x44:
+                return "new expression";
+            case 0x45:
+                return "method reference expression using ::new";
+            case 0x46:
+                return "method reference expression using ::Identifier";
+            case 0x47:
+                return "cast expression";
+            case 0x48:
+                return "for generic constructor in new expression or explicit constructor invocation statement";
+            case 0x49:
+                return "for generic method in method invocation expression";
+            case 0x4A:
+                return "for generic constructor in method reference expression using ::new";
+            case 0x4B:
+                return "for generic method in method reference expression using ::Identifier";
+            default:
+                throw new RuntimeException("Unknown target type: " + targetType);
+        }
+    }
+
     public DotItem createDotItem(ClassDot classDot, DotItem superDotItem, int index) {
         ArrayDotItem typeAnnotationDot = new ArrayDotItem("type_annotation", index, "")
                 .parent(superDotItem).style(DotStyle.DASHED).shape(DotShape.CIRCLE);
-        typeAnnotationDot.addChild("targetType", new DotItem("targetType", targetType));
+        typeAnnotationDot.addChild("targetType", new DotItem("targetType", "0x" + Integer.toHexString(targetType) + "\\n" + getReadableTargetType()).shape(DotShape.BOX));
 
         switch (targetType) {
             case 0x00:
@@ -154,8 +206,8 @@ public class TypeAnnotationVerbose {
                 throw new RuntimeException("Unknown target type: " + targetType);
         }
         typeAnnotationDot.addChild("type_path", typePath.createDotItem(classDot, typeAnnotationDot, 0));
-        typeAnnotationDot.addChild("type_index", new DotItem("type_index", typeIndex));
-        typeAnnotationDot.addChild("num_element_value_pairs", new DotItem("num_element_value_pairs", numElementValuePairs));
+        typeAnnotationDot.addChild("type", classDot.getConstantItem(typeIndex));
+        typeAnnotationDot.addChild("num_element_value_pairs", new DotItem("num_element_value_pairs", String.valueOf(numElementValuePairs)));
         for (int i = 0; i < numElementValuePairs; i++) {
             typeAnnotationDot.addChild("", elementValuePairs[i].createDotItem(classDot, typeAnnotationDot, i));
         }
