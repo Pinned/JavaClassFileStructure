@@ -78,6 +78,17 @@ public class PrintJavaClassFile {
         }
 
 
+        int fieldCount = classDot.getSubChildCount("field");
+        for (int i = 0; i < fieldCount; i++) {
+            classDot.resetPrintStatus();
+            generateGraph(projectPath, classFileName + "Field_" + i, classDot.toDotFieldGraph("field", i));
+        }
+        int methodCount = classDot.getSubChildCount("method");
+        for (int i = 0; i < methodCount; i++) {
+            classDot.resetPrintStatus();
+            generateGraph(projectPath, classFileName + "Method_" + i, classDot.toDotFieldGraph("method", i));
+        }
+
     }
 
     private static void generateGraph(String projectPath, String fileName, String graph) throws IOException {
