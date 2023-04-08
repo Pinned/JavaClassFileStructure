@@ -50,6 +50,9 @@ public class AttributeVerboseFactory {
             case "InnerClasses":
                 verbose = new InnerClassAttributeVerbose(attributeNameIndex, name, dis);
                 break;
+            case "SourceFile":
+                verbose = new SourceFileAttributeVerbose(attributeNameIndex, name, dis);
+                break;
 //
             default:
                 verbose = new UnknownAttributeVerbose(attributeNameIndex, name, dis);
