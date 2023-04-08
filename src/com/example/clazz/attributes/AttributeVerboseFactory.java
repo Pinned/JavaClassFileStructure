@@ -53,6 +53,9 @@ public class AttributeVerboseFactory {
             case "SourceFile":
                 verbose = new SourceFileAttributeVerbose(attributeNameIndex, name, dis);
                 break;
+            case "Exceptions":
+                verbose = new ExceptionAttributeVerbose(attributeNameIndex, name, dis);
+                break;
 //
             default:
                 verbose = new UnknownAttributeVerbose(attributeNameIndex, name, dis);
