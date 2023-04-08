@@ -56,6 +56,12 @@ public class AttributeVerboseFactory {
             case "Exceptions":
                 verbose = new ExceptionAttributeVerbose(attributeNameIndex, name, dis);
                 break;
+            case "NestHost":
+                verbose = new NestHostAttributeVerbose(attributeNameIndex, name, dis);
+                break;
+            case "NestMembers":
+                verbose = new NestMembersAttributeVerbose(attributeNameIndex, name, dis);
+                break;
 //
             default:
                 verbose = new UnknownAttributeVerbose(attributeNameIndex, name, dis);
