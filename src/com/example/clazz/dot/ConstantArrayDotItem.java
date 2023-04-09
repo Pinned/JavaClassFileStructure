@@ -7,6 +7,10 @@ public class ConstantArrayDotItem extends ArrayDotItem {
 
     public ConstantArrayDotItem(int index, String showLabel) {
         super("constant_item", index, showLabel);
+        if (showLabel.length() > 20) {
+            this.showValue = this.showValue.replaceAll(";", ";\\\\n");
+            this.shape(DotShape.BOX);
+        }
     }
 
     @Override
