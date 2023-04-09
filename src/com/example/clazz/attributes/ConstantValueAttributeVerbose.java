@@ -5,14 +5,13 @@ import com.example.clazz.dot.DotItem;
 
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.util.Map;
 
 public class ConstantValueAttributeVerbose extends AttributeVerbose {
 
     private int constantValueIndex;
 
-    public ConstantValueAttributeVerbose(int attributeNameIndex, String attributeName, DataInputStream dis) throws IOException {
-        super(attributeNameIndex, attributeName, dis);
+    public ConstantValueAttributeVerbose(ClassDot classDot, int attributeNameIndex, DataInputStream dis) throws IOException {
+        super(classDot, attributeNameIndex, dis);
         constantValueIndex = dis.readUnsignedShort();
     }
 

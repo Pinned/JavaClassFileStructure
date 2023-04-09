@@ -19,14 +19,15 @@ public class TypeAnnotationAttributeVerbose extends AttributeVerbose {
     public int numAnnotations;
     public TypeAnnotationVerbose[] annotations;
 
-    public TypeAnnotationAttributeVerbose(int attributeNameIndex, String attributeName, DataInputStream dis) throws IOException {
-        super(attributeNameIndex, attributeName, dis);
+    public TypeAnnotationAttributeVerbose(ClassDot classDot, int attributeNameIndex, DataInputStream dis) throws IOException {
+        super(classDot, attributeNameIndex, dis);
         numAnnotations = dis.readUnsignedShort();
         annotations = new TypeAnnotationVerbose[numAnnotations];
         for (int i = 0; i < numAnnotations; i++) {
             annotations[i] = new TypeAnnotationVerbose(dis);
         }
     }
+
 
     @Override
     public DotItem createDotItem(ClassDot classDot, DotItem parent, int index) {

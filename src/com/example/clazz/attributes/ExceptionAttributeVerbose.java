@@ -9,8 +9,9 @@ import java.io.IOException;
 public class ExceptionAttributeVerbose extends AttributeVerbose{
     public int numberOfExceptions;
     public int[] exceptionIndexTable;
-    public ExceptionAttributeVerbose(int attributeNameIndex, String attributeName, DataInputStream dis) throws IOException {
-        super(attributeNameIndex, attributeName, dis);
+
+    public ExceptionAttributeVerbose(ClassDot classDot, int attributeNameIndex, DataInputStream dis) throws IOException {
+        super(classDot, attributeNameIndex, dis);
         numberOfExceptions = dis.readUnsignedShort();
         exceptionIndexTable = new int[numberOfExceptions];
         for (int i = 0; i < numberOfExceptions; i++) {

@@ -9,10 +9,11 @@ import java.io.IOException;
 public class SourceFileAttributeVerbose extends AttributeVerbose {
     public int sourceFileIndex;
 
-    public SourceFileAttributeVerbose(int attributeNameIndex, String attributeName, DataInputStream dis) throws IOException {
-        super(attributeNameIndex, attributeName, dis);
+    public SourceFileAttributeVerbose(ClassDot classDot, int attributeNameIndex, DataInputStream dis) throws IOException {
+        super(classDot, attributeNameIndex, dis);
         sourceFileIndex = dis.readUnsignedShort();
     }
+
 
     @Override
     public DotItem createDotItem(ClassDot classDot, DotItem parent, int index) {

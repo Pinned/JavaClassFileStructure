@@ -1,19 +1,19 @@
-package com.example.clazz.attributes.innerclass;
+package com.example.clazz.attributes;
 
 
-import com.example.clazz.attributes.AttributeVerbose;
+import com.example.clazz.attributes.innerclass.InnerClass;
 import com.example.clazz.dot.ClassDot;
 import com.example.clazz.dot.DotItem;
 
 import java.io.DataInputStream;
 import java.io.IOException;
 
-public class InnerClassAttributeVerbose extends AttributeVerbose {
+public class InnerClassesAttributeVerbose extends AttributeVerbose {
     public int numberOfClasses;
     public InnerClass[] inners;
 
-    public InnerClassAttributeVerbose(int attributeNameIndex, String attributeName, DataInputStream dis) throws IOException {
-        super(attributeNameIndex, attributeName, dis);
+    public InnerClassesAttributeVerbose(ClassDot classDot, int attributeNameIndex, DataInputStream dis) throws IOException {
+        super(classDot, attributeNameIndex, dis);
         numberOfClasses = dis.readUnsignedShort();
         inners = new InnerClass[numberOfClasses];
         for (int i = 0; i < numberOfClasses; i++) {

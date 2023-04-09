@@ -1,21 +1,19 @@
 package com.example.clazz.attributes.annotation;
 
 import com.example.clazz.attributes.AttributeVerbose;
-import com.example.clazz.attributes.annotation.AnnotationElement;
 import com.example.clazz.dot.*;
 
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
-public class RuntimeVisibleParameterAnnotationsAttributeVerbose extends AttributeVerbose {
+public class ParameterAnnotationsAttributeVerbose extends AttributeVerbose {
     int numParameters;
     List<AnnotationElementArray> parameterAnnotations = new ArrayList<>();
 
-    public RuntimeVisibleParameterAnnotationsAttributeVerbose(int attributeNameIndex, String attributeName, DataInputStream dis) throws IOException {
-        super(attributeNameIndex, attributeName, dis);
+    public ParameterAnnotationsAttributeVerbose(ClassDot classDot, int attributeNameIndex, DataInputStream dis) throws IOException {
+        super(classDot, attributeNameIndex, dis);
         numParameters = dis.readByte();
         for (int i = 0; i < numParameters; i++) {
             parameterAnnotations.add(new AnnotationElementArray(attributeNameIndex, attributeName, dis));

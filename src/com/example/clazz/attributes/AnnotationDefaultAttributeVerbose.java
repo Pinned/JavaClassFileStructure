@@ -1,6 +1,7 @@
-package com.example.clazz.attributes.annotation;
+package com.example.clazz.attributes;
 
 import com.example.clazz.attributes.AttributeVerbose;
+import com.example.clazz.attributes.annotation.AnnotationElementValue;
 import com.example.clazz.dot.ClassDot;
 import com.example.clazz.dot.DotItem;
 
@@ -11,8 +12,8 @@ public class AnnotationDefaultAttributeVerbose extends AttributeVerbose {
 
     public AnnotationElementValue elementValue;
 
-    public AnnotationDefaultAttributeVerbose(int attributeNameIndex, String attributeName, DataInputStream dis) throws IOException {
-        super(attributeNameIndex, attributeName, dis);
+    public AnnotationDefaultAttributeVerbose(ClassDot classDot, int attributeNameIndex, DataInputStream dis) throws IOException {
+        super(classDot, attributeNameIndex, dis);
         elementValue = new AnnotationElementValue();
         elementValue.read(dis);
     }

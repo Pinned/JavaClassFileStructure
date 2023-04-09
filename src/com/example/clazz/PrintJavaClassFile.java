@@ -155,9 +155,7 @@ public class PrintJavaClassFile {
         parent.addChild("attribute", attributeCountDot);
 
         for (int j = 0; j < attributesCount; j++) {
-            int attributeNameIndex = dis.readUnsignedShort();
-            String attributeName = classDot.getConstantItem(attributeNameIndex).constant.getValue();
-            AttributeVerbose verbose = AttributeVerboseFactory.createAttributeVerbose(attributeNameIndex, attributeName, dis);
+            AttributeVerbose verbose = AttributeVerboseFactory.createAttributeVerbose(classDot, dis);
             DotItem item = verbose.createDotItem(classDot, attributeCountDot, j);
             attributeCountDot.addChild("", item);
         }

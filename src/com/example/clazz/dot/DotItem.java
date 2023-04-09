@@ -15,6 +15,11 @@ public class DotItem {
     public boolean isPrint = false;
 
 
+    public DotItem(String name, String showValue, DotItem parent) {
+        this(name, showValue);
+        this.parentDot = parent;
+    }
+
     public DotItem(String name, String showValue) {
         this.name = name;
         this.showValue = showValue;
@@ -78,7 +83,7 @@ public class DotItem {
         }
         if (this.style == DotStyle.FILLED) {
             sb.append(",");
-            sb.append("fontcolor=WHITE" );
+            sb.append("fontcolor=WHITE");
         }
 
         sb.append(",");

@@ -1,16 +1,15 @@
 package com.example.clazz.attributes;
 
-import com.example.clazz.constant.ConstantVerbose;
+import com.example.clazz.dot.ClassDot;
 
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.util.Map;
 
 public class CodeAttributeVerbose extends AttributeVerbose {
 
 
-    public CodeAttributeVerbose(int attributeNameIndex, String attributeName, DataInputStream dis) throws IOException {
-        super(attributeNameIndex, attributeName, dis);
+    public CodeAttributeVerbose(ClassDot classDot, int attributeNameIndex, DataInputStream dis) throws IOException {
+        super(classDot, attributeNameIndex, dis);
         // TODO 此处先跳过具体内容
         dis.skipBytes(attributeLength);
     }

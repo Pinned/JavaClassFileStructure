@@ -6,18 +6,20 @@ import com.example.clazz.dot.DotItem;
 import java.io.DataInputStream;
 import java.io.IOException;
 
-public class EnclosingMethodAttributeVerbose extends AttributeVerbose{
+public class EnclosingMethodAttributeVerbose extends AttributeVerbose {
     public int classIndex;
     public int methodIndex;
-    public EnclosingMethodAttributeVerbose(int attributeNameIndex, String attributeName, DataInputStream dis) throws IOException {
-        super(attributeNameIndex, attributeName, dis);
+
+    public EnclosingMethodAttributeVerbose(ClassDot classDot, int attributeNameIndex, DataInputStream dis) throws IOException {
+        super(classDot, attributeNameIndex, dis);
         classIndex = dis.readUnsignedShort();
         methodIndex = dis.readUnsignedShort();
     }
 
+
     @Override
     public DotItem createDotItem(ClassDot classDot, DotItem parent, int index) {
-        DotItem superItem =  super.createDotItem(classDot, parent, index);
+        DotItem superItem = super.createDotItem(classDot, parent, index);
         superItem.addChild("class", classDot.getConstantItem(classIndex));
         superItem.addChild("method", classDot.getConstantItem(methodIndex));
         return superItem;

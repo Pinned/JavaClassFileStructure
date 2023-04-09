@@ -1,25 +1,19 @@
 package com.example.clazz.attributes.annotation;
 
 import com.example.clazz.attributes.AttributeVerbose;
-import com.example.clazz.attributes.annotation.AnnotationElement;
-import com.example.clazz.constant.ConstantVerbose;
 import com.example.clazz.dot.ClassDot;
 import com.example.clazz.dot.DotItem;
-import com.example.clazz.dot.DotStyle;
 
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.util.Map;
 
-public class RuntimeVisibleAnnotationsAttributeVerbose extends AttributeVerbose {
-
+public class AnnotationsAttributeVerbose extends AttributeVerbose {
     private AnnotationElementArray array;
 
-    public RuntimeVisibleAnnotationsAttributeVerbose(int attributeNameIndex, String attributeName, DataInputStream dis) throws IOException {
-        super(attributeNameIndex, attributeName, dis);
+    public AnnotationsAttributeVerbose(ClassDot classDot, int attributeNameIndex, DataInputStream dis) throws IOException {
+        super(classDot, attributeNameIndex, dis);
         this.array = new AnnotationElementArray(attributeNameIndex, attributeName, dis);
     }
-
     @Override
     public DotItem createDotItem(ClassDot classDot, DotItem parent, int index) {
         DotItem superItem = super.createDotItem(classDot, parent, index);

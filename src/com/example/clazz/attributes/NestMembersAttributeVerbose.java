@@ -9,14 +9,16 @@ import java.io.IOException;
 public class NestMembersAttributeVerbose extends AttributeVerbose{
     public int numberOfClasses;
     public int[] classes;
-    public NestMembersAttributeVerbose(int attributeNameIndex, String attributeName, DataInputStream dis) throws IOException {
-        super(attributeNameIndex, attributeName, dis);
+
+    public NestMembersAttributeVerbose(ClassDot classDot, int attributeNameIndex, DataInputStream dis) throws IOException {
+        super(classDot, attributeNameIndex, dis);
         numberOfClasses = dis.readUnsignedShort();
         classes = new int[numberOfClasses];
         for (int i = 0; i < numberOfClasses; i++) {
             classes[i] = dis.readUnsignedShort();
         }
     }
+
 
     @Override
     public DotItem createDotItem(ClassDot classDot, DotItem parent, int index) {

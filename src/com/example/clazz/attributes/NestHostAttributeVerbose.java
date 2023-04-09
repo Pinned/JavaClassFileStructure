@@ -9,8 +9,8 @@ import java.io.IOException;
 public class NestHostAttributeVerbose extends AttributeVerbose{
     public int hostClassIndex;
 
-    public NestHostAttributeVerbose(int attributeNameIndex, String attributeName, DataInputStream dis) throws IOException {
-        super(attributeNameIndex, attributeName, dis);
+    public NestHostAttributeVerbose(ClassDot classDot, int attributeNameIndex, DataInputStream dis) throws IOException {
+        super(classDot, attributeNameIndex, dis);
         hostClassIndex = dis.readUnsignedShort();
     }
 

@@ -1,72 +1,26 @@
 package com.example.clazz.attributes;
 
-import com.example.clazz.attributes.annotation.*;
-import com.example.clazz.attributes.innerclass.InnerClassAttributeVerbose;
+import com.example.clazz.dot.ClassDot;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 
 public class AttributeVerboseFactory {
 
-    public static AttributeVerbose createAttributeVerbose(int attributeNameIndex, String name, DataInputStream dis) throws IOException {
-        AttributeVerbose verbose = null;
-        switch (name) {
-            case "Code":
-                verbose = new CodeAttributeVerbose(attributeNameIndex, name, dis);
-                break;
-            case "ConstantValue":
-                verbose = new ConstantValueAttributeVerbose(attributeNameIndex, name, dis);
-                break;
-            case "Deprecated":
-                verbose = new DeprecatedAttributeVerbose(attributeNameIndex, name, dis);
-                break;
-            case "RuntimeVisibleAnnotations":
-                verbose = new RuntimeVisibleAnnotationsAttributeVerbose(attributeNameIndex, name, dis);
-                break;
-            case "RuntimeInvisibleAnnotations":
-                verbose = new RuntimeInvisibleAnnotationsAttributeVerbose(attributeNameIndex, name, dis);
-                break;
-            case "RuntimeVisibleParameterAnnotations":
-                verbose = new RuntimeVisibleParameterAnnotationsAttributeVerbose(attributeNameIndex, name, dis);
-                break;
-            case "RuntimeInvisibleParameterAnnotations":
-                verbose = new RuntimeInvisibleParameterAnnotationsAttributeVerbose(attributeNameIndex, name, dis);
-                break;
-            case "RuntimeVisibleTypeAnnotations":
-                verbose = new RuntimeVisibleTypeAnnotationsAttributeVerbose(attributeNameIndex, name, dis);
-                break;
-            case "RuntimeInvisibleTypeAnnotations":
-                verbose = new RuntimeInvisibleTypeAnnotationsAttributeVerbose(attributeNameIndex, name, dis);
-                break;
-            case "AnnotationDefault":
-                verbose = new AnnotationDefaultAttributeVerbose(attributeNameIndex, name, dis);
-                break;
-            case "Signature":
-                verbose = new SignatureAttributeVerbose(attributeNameIndex, name, dis);
-                break;
-            case "EnclosingMethod":
-                verbose = new EnclosingMethodAttributeVerbose(attributeNameIndex, name, dis);
-                break;
-            case "InnerClasses":
-                verbose = new InnerClassAttributeVerbose(attributeNameIndex, name, dis);
-                break;
-            case "SourceFile":
-                verbose = new SourceFileAttributeVerbose(attributeNameIndex, name, dis);
-                break;
-            case "Exceptions":
-                verbose = new ExceptionAttributeVerbose(attributeNameIndex, name, dis);
-                break;
-            case "NestHost":
-                verbose = new NestHostAttributeVerbose(attributeNameIndex, name, dis);
-                break;
-            case "NestMembers":
-                verbose = new NestMembersAttributeVerbose(attributeNameIndex, name, dis);
-                break;
-//
-            default:
-                verbose = new UnknownAttributeVerbose(attributeNameIndex, name, dis);
-                break;
+    public static AttributeVerbose createAttributeVerbose(ClassDot dot, DataInputStream dis) throws IOException {
+        int attributeNameIndex = dis.readUnsignedShort();
+        String name = dot.getConstantItem(attributeNameIndex).constant.getValue();
+
+        String className = name + "AttributeVerbose";
+        try {
+            Class clazz = Class.forName("com.example.clazz.attributes." + className);
+            Constructor<AttributeVerbose> constructor = clazz.getConstructor(ClassDot.class, int.class, DataInputStream.class);
+            constructor.setAccessible(true);
+            return constructor.newInstance(dot, attributeNameIndex, dis);
+        } catch (Exception e) {
+            System.err.println("not found " + className);
+            return new UnknownAttributeVerbose(dot, attributeNameIndex, dis);
         }
-        return verbose;
     }
 }

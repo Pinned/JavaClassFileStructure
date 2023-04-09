@@ -1,11 +1,9 @@
 package com.example.clazz.attributes;
 
-import com.example.clazz.constant.ConstantVerbose;
 import com.example.clazz.dot.*;
 
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.util.Map;
 
 public abstract class AttributeVerbose {
     public int attributeNameIndex;
@@ -24,9 +22,9 @@ public abstract class AttributeVerbose {
         return item;
     }
 
-    public AttributeVerbose(int attributeNameIndex, String attributeName, DataInputStream dis) throws IOException {
+    public AttributeVerbose(ClassDot classDot, int attributeNameIndex, DataInputStream dis) throws IOException {
         this.attributeNameIndex = attributeNameIndex;
-        this.attributeName = attributeName;
+        this.attributeName = classDot.getConstantItem(this.attributeNameIndex).constant.getValue();
         this.attributeLength = dis.readInt();
     }
 
