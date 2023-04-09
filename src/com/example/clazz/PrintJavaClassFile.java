@@ -144,8 +144,14 @@ public class PrintJavaClassFile {
 
     private static void readAttribute(DataInputStream dis, ClassDot classDot, DotItem parent) throws IOException {
         int attributesCount = dis.readUnsignedShort();
-        DotItem attributeCountDot = new DotItem("attribute_count", String.valueOf(attributesCount))
-                .parent(parent).style(DotStyle.DASHED).shape(DotShape.CIRCLE);
+        DotItem attributeCountDot = null;
+        if (parent == classDot.rootItem) {
+            attributeCountDot = new DotItem("attribute_count", "属性\\n" + attributesCount + "个")
+                    .parent(parent).style(DotStyle.DASHED).shape(DotShape.BOX);
+        } else {
+            attributeCountDot = new DotItem("attribute_count", String.valueOf(attributesCount))
+                    .parent(parent).style(DotStyle.DASHED).shape(DotShape.CIRCLE);
+        }
         parent.addChild("attribute", attributeCountDot);
 
         for (int j = 0; j < attributesCount; j++) {
