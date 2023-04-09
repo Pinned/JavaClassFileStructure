@@ -6,11 +6,11 @@ import com.example.clazz.dot.DotItem;
 import java.io.DataInputStream;
 import java.io.IOException;
 
-public class ExceptionAttributeVerbose extends AttributeVerbose{
+public class ExceptionsAttributeVerbose extends AttributeVerbose{
     public int numberOfExceptions;
     public int[] exceptionIndexTable;
 
-    public ExceptionAttributeVerbose(ClassDot classDot, int attributeNameIndex, DataInputStream dis) throws IOException {
+    public ExceptionsAttributeVerbose(ClassDot classDot, int attributeNameIndex, DataInputStream dis) throws IOException {
         super(classDot, attributeNameIndex, dis);
         numberOfExceptions = dis.readUnsignedShort();
         exceptionIndexTable = new int[numberOfExceptions];
