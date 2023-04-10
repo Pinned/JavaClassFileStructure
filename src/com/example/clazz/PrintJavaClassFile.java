@@ -191,6 +191,8 @@ public class PrintJavaClassFile {
         int constantPoolCount = dis.readUnsignedShort();
         System.out.println("常量池数量：" + constantPoolCount);
         LinkedHashSet<ConstantVerbose> allVerbose = new LinkedHashSet<>();
+
+
         for (int i = 1; i < constantPoolCount; i++) {
             int tag = dis.readUnsignedByte();
             ConstantVerbose constantVerbose = ConstantVerboseFactory.createConstant(tag, dis);
@@ -212,6 +214,9 @@ public class PrintJavaClassFile {
             ConstantArrayDotItem item = entry.getValue();
             item.constant.updateConstantIndex(item, classDot);
         }
+        ConstantArrayDotItem dotItem = new ConstantArrayDotItem(0, "无");
+        classDot.addConstantItem(0, dotItem);
+        classDot.addChild("constant", dotItem);
 
     }
 
