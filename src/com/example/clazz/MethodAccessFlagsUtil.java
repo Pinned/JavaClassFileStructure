@@ -43,7 +43,7 @@ public class MethodAccessFlagsUtil {
             sb.append("ACC_MANDATED ");
         }
         if (sb.length() <= 0) {
-            sb.append("ACC_NONE");
+            sb.append("DEFAULT");
         }
         return sb.toString();
     }

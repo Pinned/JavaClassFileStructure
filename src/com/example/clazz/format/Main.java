@@ -19,8 +19,9 @@ public class Main {
             }
         }
 
-        String command = "cp -r " + formatDir.getAbsolutePath() + "/ " + classInfoDir.getAbsolutePath();
-        Runtime.getRuntime().exec(command);
+        Runtime.getRuntime().exec(new String[]{
+                "cp", "-r", formatDir.getAbsolutePath() + "/" , classInfoDir.getAbsolutePath()
+        });
 
     }
 
