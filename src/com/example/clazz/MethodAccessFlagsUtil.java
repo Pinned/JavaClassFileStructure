@@ -42,6 +42,9 @@ public class MethodAccessFlagsUtil {
         if ((accessFlags & 0x4000) != 0) {
             sb.append("ACC_MANDATED ");
         }
+        if (sb.length() <= 0) {
+            sb.append("ACC_NONE");
+        }
         return sb.toString();
     }
 }
