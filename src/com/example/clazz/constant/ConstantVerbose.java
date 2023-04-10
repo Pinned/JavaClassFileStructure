@@ -1,8 +1,6 @@
 package com.example.clazz.constant;
 
-import com.example.clazz.dot.ClassDot;
-import com.example.clazz.dot.ConstantArrayDotItem;
-import com.example.clazz.dot.DotItem;
+import com.example.clazz.dot.*;
 
 import java.lang.reflect.Field;
 
@@ -67,7 +65,13 @@ public interface ConstantVerbose {
                     continue;
                 }
                 String fieldName = field.getName().replaceAll("Index", "");
-                item.addChild(fieldName, classDot.getConstantItem((Integer) field.get(this)));
+                int index = (int) field.get(this);
+                if (index <= 0) {
+                    item.addChild(fieldName, new DotItem(fieldName, "#0\\n无", item)
+                            .shape(DotShape.CIRCLE).style(DotStyle.DASHED));
+                } else {
+                    item.addChild(fieldName, classDot.getConstantItem(index));
+                }
                 i++;
             } catch (Exception e) {
                 // 没有直接跳过
