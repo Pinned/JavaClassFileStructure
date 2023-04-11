@@ -14,7 +14,7 @@ public class Main {
 
         File classInfoDir = new File(projectPath, "class_info");
         for (File listFile : classInfoDir.listFiles()) {
-            if (listFile.isDirectory()) {
+            if (!listFile.isDirectory()) {
                 listFile.deleteOnExit();
             }
         }
