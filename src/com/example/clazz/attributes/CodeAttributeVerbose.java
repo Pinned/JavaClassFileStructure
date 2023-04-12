@@ -1,9 +1,10 @@
 package com.example.clazz.attributes;
 
 import com.example.clazz.attributes.code.ExceptionTableEntry;
-import com.example.clazz.dot.ArrayDotItem;
+import com.example.clazz.attributes.code.JavaVirtualMachineCode;
 import com.example.clazz.dot.ClassDot;
 import com.example.clazz.dot.DotItem;
+import com.example.clazz.dot.DotShape;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -54,7 +55,8 @@ public class CodeAttributeVerbose extends AttributeVerbose {
         DotItem codeLengthDotItem = new DotItem("code_length", String.valueOf(codeLength), superDotItem);
         superDotItem.addChild("code_length", codeLengthDotItem);
         // 此处 Code 先只保存长度
-        DotItem codeDotItem = new DotItem("code", String.valueOf(code.length), superDotItem);
+        DotItem codeDotItem = new DotItem("code", JavaVirtualMachineCode.readByteCode(code), superDotItem)
+                .shape(DotShape.BOX);
         superDotItem.addChild("code", codeDotItem);
         DotItem exceptionTableLengthDotItem = new DotItem("exception_table_length", String.valueOf(exceptionTableLength), superDotItem);
         superDotItem.addChild("exception_table_length", exceptionTableLengthDotItem);
