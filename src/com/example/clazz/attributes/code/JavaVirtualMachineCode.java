@@ -18,9 +18,9 @@ public class JavaVirtualMachineCode {
                 if (opcode == Opcode.WIDE) {
                     codeByte = dis.read() & 0xFF;
                     opcode = Opcode.createByCode(codeByte);
-                    sb.append("#" + Integer.toHexString(codeByte) + " " + opcode + " " + readOperationNumber(opcode, dis, true) + "\\n");
+                    sb.append("#" + Integer.toHexString(codeByte) + " " + opcode + " " + readOperationNumber(opcode, dis, true) + "\\l");
                 } else {
-                    sb.append("#" + Integer.toHexString(codeByte) + " " + Opcode.createByCode((byte) codeByte) + " " + readOperationNumber(opcode, dis, true) + "\\n");
+                    sb.append("#" + Integer.toHexString(codeByte) + " " + Opcode.createByCode((byte) codeByte) + " " + readOperationNumber(opcode, dis, true) + "\\l");
                 }
             }
         } catch (Exception e) {
@@ -218,7 +218,7 @@ public class JavaVirtualMachineCode {
                 // the only immediate short instruction that does
                 // not have an immediate constant pool reference
             case SIPUSH:
-                return " " + dis.readUnsignedShort();
+                return " #" + dis.readUnsignedShort();
             case IFEQ:
             case IFNE:
             case IFLT:
