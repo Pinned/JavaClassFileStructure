@@ -82,6 +82,7 @@ public class AnnotationElementValue {
     public DotItem createDotItem(ClassDot classDot, DotItem parent, int index) {
         ArrayDotItem item = new ArrayDotItem("value", index, "value")
                 .parent(parent).style(DotStyle.DASHED).shape(DotShape.CIRCLE);
+        item.addChild("tag", new DotItem("tag", "" + ((char) tag), item));
         switch (tag) {
             case 'B':
             case 'C':
