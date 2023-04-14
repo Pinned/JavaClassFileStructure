@@ -23,7 +23,7 @@ public class ExceptionMethodExample {
 
     public static void main(String[] args) {
         ExceptionMethodExample example = new ExceptionMethodExample();
-        System.out.println(example.setup().x);
+        System.out.println(example.setup());
     }
     
 }
