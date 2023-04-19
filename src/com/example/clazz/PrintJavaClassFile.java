@@ -89,6 +89,9 @@ public class PrintJavaClassFile {
             generateGraph(projectPath, classFileName + "Method_" + i, classDot.toDotFieldGraph("method", i));
         }
 
+        classDot.resetPrintStatus();
+        generateGraph(projectPath, classFileName + "Constant", classDot.toConstantGraph());
+
     }
 
     private static void generateGraph(String projectPath, String fileName, String graph) throws IOException {
