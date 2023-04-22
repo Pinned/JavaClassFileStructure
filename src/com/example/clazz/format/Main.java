@@ -20,7 +20,11 @@ public class Main {
         }
 
         Runtime.getRuntime().exec(new String[]{
-                "cp", "-r", formatDir.getAbsolutePath() + "/" , classInfoDir.getAbsolutePath()
+                "cp", "-r", formatDir.getAbsolutePath() + "/", classInfoDir.getAbsolutePath()
+        });
+        File customClassDir = new File(projectPath, "custom_class");
+        Runtime.getRuntime().exec(new String[]{
+                "cp", "-r", customClassDir.getAbsolutePath() + "/", classInfoDir.getAbsolutePath()
         });
 
     }

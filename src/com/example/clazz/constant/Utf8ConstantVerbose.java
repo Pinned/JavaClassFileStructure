@@ -2,6 +2,11 @@ package com.example.clazz.constant;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CodingErrorAction;
+import java.util.Base64;
 
 class Utf8ConstantVerbose implements ConstantVerbose {
     private String value;
@@ -10,8 +15,25 @@ class Utf8ConstantVerbose implements ConstantVerbose {
         int length = dis.readUnsignedShort();
         byte[] bytes = new byte[length];
         dis.read(bytes);
-        value = new String(bytes);
+        if (isUtf8(bytes)) {
+            value = new String(bytes, "UTF-8");
+        } else {
+            value = Base64.getEncoder().encodeToString(bytes);
+        }
     }
+
+    public  boolean isUtf8(byte[] bytes) {
+        CharsetDecoder decoder = Charset.forName("UTF-8").newDecoder();
+        decoder.onMalformedInput(CodingErrorAction.REPORT);
+        decoder.onUnmappableCharacter(CodingErrorAction.REPORT);
+        try {
+            decoder.decode(ByteBuffer.wrap(bytes));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     @Override
     public int getSkipCount() {
         return 0;
