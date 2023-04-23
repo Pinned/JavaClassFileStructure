@@ -98,6 +98,16 @@ public class ClassDot {
         return sb.toString();
     }
 
+    public String toConstantGraph(int constantIndex) {
+        System.out.println("constantIndex = " + constantIndex);
+        StringBuffer sb = new StringBuffer();
+        sb.append("digraph class_file { \n");
+        DotItem childDot = allConstantItem.get(String.valueOf(constantIndex));
+        sb.append(childDot.toDotGraph());
+        sb.append("}");
+        return sb.toString();
+    }
+
     public int getSubChildCount(String prefix) {
         for (DotItem childDot : rootItem.childDots) {
             if (childDot.isNodeNameStart(prefix)) {

@@ -91,6 +91,11 @@ public class PrintJavaClassFile {
 
         classDot.resetPrintStatus();
         generateGraph(projectPath, classFileName + "Constant", classDot.toConstantGraph());
+        System.out.println("常量池数量：" + classDot.allConstantItem.size());
+        for (int i = 0; i < classDot.allConstantItem.size(); i++) {
+            classDot.resetPrintStatus();
+            generateGraph(projectPath, classFileName + "Constant" + (i), classDot.toConstantGraph(i));
+        }
 
     }
 
