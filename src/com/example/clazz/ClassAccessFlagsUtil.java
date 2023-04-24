@@ -27,6 +27,12 @@ public class ClassAccessFlagsUtil {
         if ((accessFlags & 0x4000) != 0) {
             sb.append("ACC_ENUM ");
         }
+        if ((accessFlags & 0x8000) != 0) {
+            sb.append("ACC_MODULE ");
+        }
+        if (sb.length() <= 0) {
+            return "ACC_DEFAULT";
+        }
         return sb.toString();
     }
 }
