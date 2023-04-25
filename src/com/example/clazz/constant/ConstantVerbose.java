@@ -2,6 +2,7 @@ package com.example.clazz.constant;
 
 import com.example.clazz.dot.*;
 
+import java.io.DataOutputStream;
 import java.lang.reflect.Field;
 
 public interface ConstantVerbose {
@@ -90,4 +91,6 @@ public interface ConstantVerbose {
     }
 
     int getSkipCount();
+
+    void write(Integer tag, DataOutputStream dos);
 }

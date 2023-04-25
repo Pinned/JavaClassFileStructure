@@ -1,6 +1,7 @@
 package com.example.clazz.constant;
 
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 
 class IntegerConstantVerbose implements ConstantVerbose {
@@ -13,5 +14,15 @@ class IntegerConstantVerbose implements ConstantVerbose {
     @Override
     public int getSkipCount() {
         return 0;
+    }
+
+    @Override
+    public void write(Integer tag, DataOutputStream dos) {
+        try {
+            dos.writeByte(tag & 0xFF);
+            dos.writeInt(value & 0xFFFFFFFF);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

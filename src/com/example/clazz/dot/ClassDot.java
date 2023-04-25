@@ -99,11 +99,12 @@ public class ClassDot {
     }
 
     public String toConstantGraph(int constantIndex) {
-        System.out.println("constantIndex = " + constantIndex);
         StringBuffer sb = new StringBuffer();
         sb.append("digraph class_file { \n");
         DotItem childDot = allConstantItem.get(String.valueOf(constantIndex));
-        sb.append(childDot.toDotGraph());
+        if (childDot != null) {
+            sb.append(childDot.toDotGraph());
+        }
         sb.append("}");
         return sb.toString();
     }

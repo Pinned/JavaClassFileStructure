@@ -5,6 +5,7 @@ import com.example.clazz.dot.ConstantArrayDotItem;
 import com.example.clazz.dot.DotItem;
 
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 
 class MethodHandleConstantVerbose implements ConstantVerbose {
@@ -61,5 +62,16 @@ class MethodHandleConstantVerbose implements ConstantVerbose {
     @Override
     public int getSkipCount() {
         return 0;
+    }
+
+    @Override
+    public void write(Integer tag, DataOutputStream dos) {
+        try {
+            dos.writeByte(tag & 0xFF);
+            dos.writeByte(methodHandleKind & 0xFF);
+            dos.writeShort(methodHandleIndex & 0xFFFF);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
