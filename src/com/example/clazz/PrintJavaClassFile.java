@@ -97,6 +97,10 @@ public class PrintJavaClassFile {
             generateGraph(projectPath, classFileName + "Constant" + (i), classDot.toConstantGraph(i));
         }
 
+        // 打印 thisClass, supper class 以及 interface
+        classDot.resetPrintStatus();
+        generateGraph(projectPath, classFileName + "Relation", classDot.toDotGraph("relation"));
+
     }
 
     private static void generateGraph(String projectPath, String fileName, String graph) throws IOException {
@@ -167,23 +171,28 @@ public class PrintJavaClassFile {
     private static void readInterfaces(DataInputStream dis, ClassDot classDot) throws IOException {
         int interfaceCount = dis.readUnsignedShort();
         System.out.println("接口数量：" + interfaceCount);
+        DotItem interfaceDot = new DotItem("relation_interface", "interface\\n" + interfaceCount + "个")
+                .color(Color.BLUE)
+                .shape(DotShape.BOX);
         for (int i = 0; i < interfaceCount; i++) {
-            readClassClassIndex(dis, classDot, "interface_" + i, "接口" + i);
+            ArrayDotItem arrayDotItem = new ArrayDotItem("interface", i, "")
+                    .style(DotStyle.DASHED)
+                    .parent(interfaceDot);
+            int classIndex = dis.readUnsignedShort();
+            arrayDotItem.addChild("", classDot.getConstantItem(classIndex));
+            interfaceDot.addChild("", arrayDotItem);
         }
+        classDot.addChild("", interfaceDot);
     }
 
     private static void readClassClassIndex(DataInputStream dis, ClassDot classDot, String name) throws IOException {
-        readClassClassIndex(dis, classDot, name, name);
-    }
-
-    private static void readClassClassIndex(DataInputStream dis, ClassDot classDot, String name, String showValue) throws IOException {
-        int thisClass = dis.readUnsignedShort();
-        System.out.println(showValue + "：#" + thisClass);
-        DotItem thisClassDot = new DotItem(name, showValue);
-        thisClassDot.color = Color.BLUE;
-        thisClassDot.shape = DotShape.DOUBLECIRCLE;
-        classDot.addChild(name, thisClassDot);
-        thisClassDot.addChild("", classDot.getConstantItem(thisClass));
+        DotItem dot = new DotItem("relation_" + name, name)
+                .color(Color.BLUE)
+                .style(DotStyle.DASHED)
+                .shape(DotShape.BOX);
+        int classIndex = dis.readUnsignedShort();
+        dot.addChild("", classDot.getConstantItem(classIndex));
+        classDot.addChild("", dot);
     }
 
     private static void readClassAccessFlag(DataInputStream dis, ClassDot classDot) throws IOException {
