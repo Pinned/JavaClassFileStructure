@@ -1,4 +1,4 @@
-package com.example.clazz;
+package com.example.clazz.utils;
 
 public class MethodAccessFlagsUtil {
     public static String getAccessFlagDetail(int accessFlags) {
