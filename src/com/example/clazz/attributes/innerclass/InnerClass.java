@@ -1,6 +1,6 @@
 package com.example.clazz.attributes.innerclass;
 
-import com.example.clazz.ClassAccessFlagsUtil;
+import com.example.clazz.utils.ClassAccessFlagsUtil;
 import com.example.clazz.dot.*;
 
 import java.io.DataInputStream;

@@ -1,6 +1,6 @@
 package com.example.clazz.attributes;
 
-import com.example.clazz.MethodAccessFlagsUtil;
+import com.example.clazz.utils.MethodAccessFlagsUtil;
 import com.example.clazz.dot.*;
 
 import java.io.DataInputStream;

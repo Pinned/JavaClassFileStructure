@@ -1,6 +1,6 @@
 package com.example.clazz.attributes;
 
-import com.example.clazz.ModuleAccessFlagsUtil;
+import com.example.clazz.utils.ModuleAccessFlagsUtil;
 import com.example.clazz.attributes.module.Exports;
 import com.example.clazz.attributes.module.Opens;
 import com.example.clazz.attributes.module.Provides;

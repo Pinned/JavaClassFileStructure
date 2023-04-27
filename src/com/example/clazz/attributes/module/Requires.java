@@ -1,6 +1,6 @@
 package com.example.clazz.attributes.module;
 
-import com.example.clazz.ModuleRequiresAccessFlagsUtil;
+import com.example.clazz.utils.ModuleRequiresAccessFlagsUtil;
 import com.example.clazz.dot.ArrayDotItem;
 import com.example.clazz.dot.ClassDot;
 import com.example.clazz.dot.DotItem;
