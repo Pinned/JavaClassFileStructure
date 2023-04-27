@@ -8,16 +8,6 @@ public class ConstantArrayDotItem extends ArrayDotItem {
     public ConstantArrayDotItem(int index, String showLabel) {
         super("constant_item", index, showLabel);
         if (showLabel.length() > 20) {
-            if (this.showValue.contains(";")) {
-                if (this.showValue.contains("Utf8\\(")) {
-                    this.showValue = this.showValue.replaceAll("Utf8\\(", "Utf8(\\\\l");
-                } else {
-                    this.showValue = this.showValue.replaceAll("Utf8\\(\\(", "Utf8((\\\\l");
-                }
-//                this.showValue = this.showValue.replaceAll("Utf8\\(+", "Utf8(\\\\l");
-                this.showValue = this.showValue.replaceAll(";", ";\\\\l");
-                this.showValue += "\\l";
-            }
             this.shape(DotShape.BOX);
         }
     }

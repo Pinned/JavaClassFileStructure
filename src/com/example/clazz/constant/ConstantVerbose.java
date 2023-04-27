@@ -45,7 +45,14 @@ public interface ConstantVerbose {
         try {
             Field value = this.getClass().getDeclaredField("value");
             value.setAccessible(true);
-            showLabel = verbose + "(" + value.get(this) + ")";
+            String realValue = String.valueOf(value.get(this));
+            if (realValue.length() > 20) {
+                realValue = "\\l" + realValue;
+                realValue.replaceAll("\\(\\)", "\\(\\)\\\\l");
+                realValue.replaceAll(";", ";\\\\l");
+                realValue += "\\l";
+            }
+            showLabel = verbose + "(" + realValue + ")\\l";
         } catch (Exception e) {
             // 没有 value 字段，直接生成 dot 语法
             showLabel = verbose + "()";
