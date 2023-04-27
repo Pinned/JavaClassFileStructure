@@ -5,10 +5,7 @@ import com.example.clazz.attributes.AttributeVerboseFactory;
 import com.example.clazz.constant.*;
 import com.example.clazz.dot.*;
 import com.example.clazz.format.Main;
-import com.example.clazz.reader.AllClassPrinter;
-import com.example.clazz.reader.ClassFormat$1Printer;
-import com.example.clazz.reader.ClassReader;
-import com.example.clazz.reader.IClassToGraphPrinter;
+import com.example.clazz.reader.*;
 import com.example.clazz.utils.ClassAccessFlagsUtil;
 import com.example.clazz.utils.FieldAccessFlagsUtil;
 import com.example.clazz.utils.MethodAccessFlagsUtil;
@@ -28,7 +25,8 @@ public class PrintJavaClassFile {
 
         IClassToGraphPrinter[] allPrinter = new IClassToGraphPrinter[]{
 //                new AllClassPrinter(),
-                new ClassFormat$1Printer(),
+//                new ClassFormat$1Printer(),
+                new MethodAccBridgePrinter()
         };
         for (IClassToGraphPrinter printer : allPrinter) {
             File[] files = printer.classFilePath(file);

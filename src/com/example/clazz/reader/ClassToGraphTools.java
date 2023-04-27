@@ -40,7 +40,7 @@ public class ClassToGraphTools {
         }
     }
 
-    public static void printSingleFieldGraph(String filePath, ClassDot classDot, int index) throws IOException {
+    public static void printSingleFieldGraph(String filePath, ClassDot classDot, int... index) throws IOException {
         classDot.resetPrintStatus();
         generateGraph(filePath, "Field_" + index, classDot.toDotFieldGraph("field", index));
     }
@@ -52,7 +52,7 @@ public class ClassToGraphTools {
         }
     }
 
-    public static void printSingleMethodGraph(String filePath, ClassDot classDot, int index) throws IOException {
+    public static void printSingleMethodGraph(String filePath, ClassDot classDot, int... index) throws IOException {
         classDot.resetPrintStatus();
         generateGraph(filePath, "Method_" + index, classDot.toDotFieldGraph("method", index));
     }

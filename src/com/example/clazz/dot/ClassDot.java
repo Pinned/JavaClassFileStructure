@@ -1,6 +1,8 @@
 package com.example.clazz.dot;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ClassDot {
@@ -72,20 +74,37 @@ public class ClassDot {
         return sb.toString();
     }
 
-    public String toDotFieldGraph(String prefix, int index) {
+    private boolean contains(int value, int... index) {
+        for (int i = 0; i < index.length; i++) {
+            if (index[i] == value) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public String toDotFieldGraph(String prefix, boolean ignoreAttribute, int... index) {
         StringBuffer sb = new StringBuffer();
         sb.append("digraph class_file { \n");
         int curr = 0;
         for (DotItem childDot : rootItem.childDots) {
             if (childDot.isNodeNameStart(prefix)) {
-                if (curr == index) {
-                    sb.append(childDot.toDotGraph());
+                System.out.println(curr);
+                if (contains(curr, index)) {
+                    System.out.println("contain");
+                    sb.append(childDot.toDotGraph(!ignoreAttribute));
+                } else {
+                    System.out.println("not contain");
                 }
                 curr++;
             }
         }
         sb.append("}");
         return sb.toString();
+    }
+
+    public String toDotFieldGraph(String prefix, int... index) {
+        return toDotFieldGraph(prefix, false, index);
     }
 
     public String toConstantGraph() {

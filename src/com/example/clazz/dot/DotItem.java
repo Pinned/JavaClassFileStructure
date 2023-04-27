@@ -98,6 +98,10 @@ public class DotItem {
 
 
     public String toDotGraph() {
+        return toDotGraph(true);
+    }
+
+    public String toDotGraph(boolean withAttribute) {
         if (isPrint) {
             return "";
         }
@@ -107,6 +111,9 @@ public class DotItem {
         sb.append("\n");
 
         for (DotItem childDot : childDots) {
+            if (childDot.isNodeNameStart("attribute") && !withAttribute) {
+                continue;
+            }
             String childShow = childDot.toDotGraph();
             sb.append(childShow);
             sb.append("\n");
