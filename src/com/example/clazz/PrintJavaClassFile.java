@@ -26,7 +26,9 @@ public class PrintJavaClassFile {
         IClassToGraphPrinter[] allPrinter = new IClassToGraphPrinter[]{
 //                new AllClassPrinter(),
 //                new ClassFormat$1Printer(),
-                new MethodAccBridgePrinter()
+//                new MethodAccBridgePrinter(),
+//                new MethodAccStrictPrinter(),
+                new SealedPrinter()
         };
         for (IClassToGraphPrinter printer : allPrinter) {
             File[] files = printer.classFilePath(file);
